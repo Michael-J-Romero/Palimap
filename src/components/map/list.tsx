@@ -10,7 +10,8 @@ import {
 } from "@mui/material";
 
 import SimpleBar from "simplebar-react";
-
+import {settings as allSettings} from '@/data/builtIn'
+const settings=allSettings
 function List({
   openLocation,
   allData,
@@ -37,7 +38,7 @@ console.log("theme",theme)
     <Box
     boxShadow={4}
       sx={{
-        zIndex: window.settings.zIndex.mapList,
+        zIndex: settings.zIndex.mapList,
         bgcolor: theme.palette.background.paper,
         color: theme.palette.text.primary,
         width: "100%",
@@ -62,7 +63,7 @@ console.log("theme",theme)
           alignItems: "center",
           position: "sticky",
           top: 0,
-          zIndex: window.settings.zIndex.mapListMenu,
+          zIndex: settings.zIndex.mapListMenu,
           bgcolor: theme.palette.background.subtle,
           borderTop: `1px solid rgb(0 0 0 / 8%)`,
           // borderTop: `1px solid ${theme.palette.divider}`,

@@ -7,7 +7,8 @@ import { AppBar, Toolbar, Typography, Box } from '@mui/material';
 import styled from 'styled-components';
 import Nav from './Nav';
 import { usePathname, useRouter } from 'next/navigation';
-
+import {settings as allSettings} from '@/data/builtIn'
+const settings=allSettings
 
 const Logo = styled(Typography)`
   font-weight: bold;
@@ -29,7 +30,7 @@ const Header = () => {
     color: 'text.primary', 
     // boxShadow:1, 
     // borderBottom: 1,
-    zIndex: window.settings.zIndex.header,
+    zIndex: settings.zIndex.header,
     
     }}>
     <Toolbar

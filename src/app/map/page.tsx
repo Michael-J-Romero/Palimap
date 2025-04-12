@@ -6,7 +6,8 @@ import Map from '@/components/map';
 import { useSearchParams, useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import LocationModal from '@/components/Location'; // Your modal
-
+import {settings as allSettings} from '@/data/builtIn'
+const settings=allSettings
 export default function MapPage() {
   const searchParams = useSearchParams();
   const router = useRouter();
@@ -37,7 +38,7 @@ console.log('slug', slug,showModal)
       {/* Your actual map would go here */}
       {showModal && slug && (
         <div    style={{ 
-            zIndex: window.settings.zIndex.map,
+            zIndex: settings.zIndex.map,
             height: '100%',
             width: '100%',
             // position: 'fixed',

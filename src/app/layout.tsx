@@ -7,7 +7,7 @@ import { ThemeProvider as MuiThemeProvider, CssBaseline } from '@mui/material';
 import Layout from '@/components/Layout.tsx';
 import { ThemeContextProvider, useThemeContext } from '@/context/ThemeContext';
 import {settings as allSettings} from '@/data/builtIn'
-window.settings=allSettings
+const settings=allSettings
 function InnerLayout({ children }) {
   const { theme } = useThemeContext();
   return (

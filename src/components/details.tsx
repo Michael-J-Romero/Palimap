@@ -24,7 +24,8 @@ import "simplebar-react/dist/simplebar.min.css";
 import ImageCarousel from "./ImageCarousel";
 import Comments from "./Comments";
 import getData from "./map/data.js";
-
+import {settings as allSettings} from '@/data/builtIn'
+const settings=allSettings
 let placeholder = `This location serves as a point of interest, offering a space for updates, contributions, and activity. Whether for informational purposes, ongoing developments, or general engagement, this entry provides relevant details for those interested.
 
 Changes and updates may occur over time as new information becomes available. Various efforts, contributions, or modifications may shape how this location is utilized or perceived. Those involved can provide insights, share updates, or track progress as needed.
@@ -89,7 +90,7 @@ export default function Details({ slug, onClose }) {
                   top: 0,
                   marginLeft: -2,
 
-                  zIndex: window.settings.zIndex.locationModal,
+                  zIndex: settings.zIndex.locationModal,
                 }}
               >
                 <Tooltip title="Back to map" >
