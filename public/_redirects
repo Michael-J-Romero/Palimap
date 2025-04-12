@@ -1,1 +1,7 @@
+# Let Next handle routing
 /*    /    200
+
+# But exclude Next.js assets from that rule
+/_next/*  /_next/:splat  200
+/assets/*  /assets/:splat  200
+/favicon.ico  /favicon.ico  200
