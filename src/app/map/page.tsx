@@ -1,7 +1,7 @@
 // Placeholder for page.tsx
 
 'use client';
-import Map from '@/components/Map';
+import Map from '@/components/map';
 
 import { useSearchParams, useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
