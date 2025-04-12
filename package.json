@@ -30,7 +30,6 @@
     "uuid": "11.1.0"
   },
   "devDependencies": {
-    "@netlify/plugin-nextjs": "^5.10.5",
     "typescript": "^5.8.3"
   }
 }
