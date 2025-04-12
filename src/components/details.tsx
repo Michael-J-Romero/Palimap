@@ -38,8 +38,10 @@ Further details may be added as the situation evolves. Any participation, feedba
  
 export default function Details({ slug, onClose }) {
   const allData = getData();
-  console.log("allData", allData,slug);
-  const data = allData[slug];
+  const data = allData.find((item) => 
+    item.id == slug
+);
+  console.log("allData", allData,slug,data);
   if (!data) return null;
 
   const theme = useTheme();
