@@ -104,7 +104,8 @@ const Nav = () => {
                 selected={pathname === href}
                 onClick={() => {
                   setMenuAnchor(null);
-                  router.push(href);
+                  // router.push(href); //this causes a full page reload, use router.push with shallow: true to prevent it
+                  router.push(href, undefined, { shallow: true });
                 }}
               >
                 {label}

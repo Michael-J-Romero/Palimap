@@ -80,6 +80,7 @@ function Container({ Map, Details, Footer,List,Header,selectedLocation }) {
           {List}
         </div>
         
+      </div>
         <div className="overlay" style={{
           display: selectedLocation !== null
           ? "block" : "none",
@@ -88,7 +89,6 @@ function Container({ Map, Details, Footer,List,Header,selectedLocation }) {
             {Details}
           </div>
         </div>
-      </div>
       {/* <div className="footer-container">
         {Footer}
       </div> */}

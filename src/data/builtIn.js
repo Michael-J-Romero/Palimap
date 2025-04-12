@@ -147,9 +147,9 @@ const tempData1 = [
         scale: 1.0, // zoom level (e.g. 1.05 for slight zoom-in)
         overlayGradient: 'linear-gradient(to top, rgba(0,0,0,0.4), rgba(0,0,0,0))',
         images : [
-          './heroImages/7.png ',
-          './heroImages/6.jpg ',
           './heroImages/4.png ',
+          './heroImages/6.jpg ',
+          './heroImages/7.png ',
           './heroImages/2.webp ',
           './heroImages/1.webp ',
           './heroImages/5.png ',

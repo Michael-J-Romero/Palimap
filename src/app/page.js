@@ -66,7 +66,7 @@ import HeroSlideshow from "@/components/HeroSlideshow";
   const router = useRouter();
   const mapButton = (
     <Button fullWidth={isSm}
-    onClick={() => router.push('/map')}
+    onClick={() => router.push('/map', undefined, { shallow: true })}
     variant="contained" size="large" startIcon={<MapIcon />}>
       View the Map
     </Button>

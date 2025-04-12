@@ -62,7 +62,7 @@ const Header = () => {
         }}>
       <Logo 
       //make clickable
-      onClick={() => router.push('/')}
+      onClick={() => router.push('/', undefined, { shallow: true })}
 
       variant="h6" 
       sx={{ 

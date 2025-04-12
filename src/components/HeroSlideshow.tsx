@@ -9,11 +9,19 @@ import {settings as allSettings} from '@/data/builtIn'
 const settings=allSettings.HeroSlideshow
 const images = settings.images;
 // 'Hope After the Fire',
+const preloadImages = (urls) => {
+  urls.forEach((url) => {
+    const img = new Image();
+    img.src = url;
+  });
+};
 
 export default function CrossfadeBanner() {
   const [index, setIndex] = useState(0);
   const [prevIndex, setPrevIndex] = useState(null);
-
+  useEffect(() => {
+    preloadImages(images);
+  }, []);
   useEffect(() => {
     const interval = setInterval(() => {
       setPrevIndex(index);
@@ -25,7 +33,7 @@ export default function CrossfadeBanner() {
   return (
     <Box sx={{ position: 'relative', height: '100%', width: '100%', overflow: 'hidden' }}>
       {/* New (current) image: Pans up */}
-      <motion.img
+      <motion.img 
       src={images[index]}
         key={`current-${index}`}
         initial={{ y: settings.startY, scale: settings.scale }}
@@ -37,6 +45,9 @@ export default function CrossfadeBanner() {
           top: 0,
           left: 0,
           zIndex: 1,
+          willChange: 'transform',
+          transform: 'translateZ(0)',
+       
         }}
       />
 
@@ -49,11 +60,14 @@ export default function CrossfadeBanner() {
           animate={{ opacity: 0 }}
           transition={{ duration: settings.fadeDuration / 1000 }}
           style={{
+            willChange: 'transform',
+            transform: 'translateZ(0)',
+          
             position: 'absolute',
           width: '100%',
           top: 0,
           left: 0,
-            transform: `translateY(${settings.endY}) scale(${settings.scale * 1.05})`,
+            transform: `translateZ(0) translateY(${settings.endY}) scale(${settings.scale * 1.05})`,
             zIndex: 2,
           }}
         />

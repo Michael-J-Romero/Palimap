@@ -30,7 +30,7 @@ export default function MapPage() {
   }, [slug, router]);
 
   const openLocation = (slug: string) => {
-    router.push(`/map?location=${slug}`);
+    router.push(`/map?location=${slug}`, undefined, { shallow: true });
   };
 console.log('slug', slug,showModal)
   return (
@@ -52,7 +52,7 @@ console.log('slug', slug,showModal)
         <LocationModal
           slug={slug}
           onClose={() => {
-            router.push('/map'); // Remove query param
+            router.push('/map', undefined, { shallow: true }); // Remove query param
           }}
         />
         </div>
