@@ -140,18 +140,18 @@ const tempData1 = [
     const settings = {
       zIndex,
       HeroSlideshow:{
-        duration: 9000, // milliseconds each image is shown
-        fadeDuration: 1000, // milliseconds for fade out
+        duration: 8000, // milliseconds each image is shown
+        fadeDuration: 800, // milliseconds for fade out
         startY: '-20%', // starting Y offset for pan
         endY: '-25%', // ending Y offset for pan
         scale: 1.0, // zoom level (e.g. 1.05 for slight zoom-in)
         overlayGradient: 'linear-gradient(to top, rgba(0,0,0,0.4), rgba(0,0,0,0))',
         images : [
-          './heroImages/4.png ',
           './heroImages/6.jpg ',
+          './heroImages/4.png ',
           './heroImages/7.png ',
-          './heroImages/2.webp ',
           './heroImages/1.webp ',
+          './heroImages/2.webp ',
           './heroImages/5.png ',
           './heroImages/3.jfif ',
         ],

@@ -237,14 +237,14 @@ const HomepageBody = () => {
 
 
       {/* Live Stats Placeholder */}
-      <Box mb={2} display="flex" flexDirection="row" alignItems="center" justifyContent="flex-start">
+        <Divider />
+      <Box mb={2} my={2} display="flex" flexDirection="row" alignItems="center" justifyContent="flex-start">
         <Typography variant="h5" fontWeight="bold" gutterBottom>
           This Week’s Highlights
         </Typography>
         <Typography variant="body2" color="text.secondary" ml={2}>
           14 new posts • 3 new business reopenings • 1 safety alert
         </Typography>
-        <Divider />
       </Box>
 
       {/* Recent Activity Feed (placeholder) */}
@@ -280,12 +280,12 @@ const HomepageBody = () => {
       </Grid>
 
       {/* show categories as chips */}
-      <Box mb={6} textAlign="center">
-        <Typography variant="h5" fontWeight="bold" gutterBottom>
-          What are you looking for? 
+      <Box mb={4} textAlign="left">
+        <Stack mt={0} direction="row"  flexWrap="wrap">
+        <Typography variant="h5" fontWeight="bold" gutterBottom mr={2}>
+          Find Posts by Category: 
+          
         </Typography>
-        <Divider />
-        <Box mt={2}>
 
           {types.map((type, i) => (
             <Box key={i} display="inline-block" mr={1} mb={1}>
@@ -294,12 +294,14 @@ const HomepageBody = () => {
               </Button>
             </Box>
           ))}
-        </Box>
+        </Stack>
+
       </Box>
 
+        <Divider />
 
       {/* Closing Call to Action */}
-      <Box textAlign="center">
+      <Box textAlign="center" mt={3}  >
         <Typography variant="h6" gutterBottom>
           This map is powered by the community and needs your help!
         </Typography>
