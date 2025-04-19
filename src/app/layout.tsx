@@ -12,7 +12,7 @@ function InnerLayout({ children }) {
   const { theme } = useThemeContext();
   return (
     <MuiThemeProvider theme={theme}>
-      <CssBaseline />
+      {/* <CssBaseline /> */}
       <Layout>
         {children}
         </Layout>
@@ -24,13 +24,13 @@ export default function RootLayout({ children }) {
   return (
     <html lang="en">
       <body>
-        {/* <AWSProvider>
-          <AuthProvider> */}
+        {/* <AWSProvider>*/}
+        <AuthProvider> 
             <ThemeContextProvider>
               <InnerLayout>{children}</InnerLayout>
             </ThemeContextProvider>
-          {/* </AuthProvider>
-        </AWSProvider> */}
+          </AuthProvider>
+       {/*  </AWSProvider> */}
       </body>
     </html>
   );

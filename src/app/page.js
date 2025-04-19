@@ -86,7 +86,8 @@ import HeroSlideshow from "@/components/HeroSlideshow";
     >
       {isSm
         ? 'Your hub for fire recovery — see updates and support.'
-        : 'Your interactive hub for fire recovery — see updates, share progress, and support your community.'}
+        : `Your interactive hub for fire recovery 
+        — see updates, share progress, and support your community.`}
     </Typography>
   );
 
@@ -248,7 +249,7 @@ const HomepageBody = () => {
       </Box>
 
       {/* Recent Activity Feed (placeholder) */}
-      <Grid container spacing={4} mb={6}>
+      <Grid container spacing={4} mb={4}>
         {imageArray.slice( 7,10 * settings.recentActivityRows).map((img, i) => (
           <Grid item xs={12} md={4} key={i}>
             <Card>
