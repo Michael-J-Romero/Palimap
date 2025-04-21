@@ -2,7 +2,7 @@
 import React, { useRef, useEffect } from "react";
 import "leaflet/dist/leaflet.css";
 import L from "leaflet";
-import "leaflet-side-by-side";
+// import "leaflet-side-by-side";
 
 // ✅ Extend Leaflet with canvas-based mask plugin using per-pixel alpha masking
 function addPlugin(){
@@ -99,121 +99,123 @@ function SplitMapComparison() {
   const mapRef = useRef(null);
 
   useEffect(() => {
-    addPlugin();
-    const map = L.map(mapContainerRef.current, {
-      center: [34.055, -118.55],
-      zoom: 14,
-      maxZoom: 22,
-      zoomControl: true,
-      crs: L.CRS.EPSG3857
-    });
+    import("leaflet-side-by-side").then(() => {
+        addPlugin();
+        const map = L.map(mapContainerRef.current, {
+        center: [34.055, -118.55],
+        zoom: 14,
+        maxZoom: 22,
+        zoomControl: true,
+        crs: L.CRS.EPSG3857
+        });
 
-    mapRef.current = map;
+        mapRef.current = map;
 
-    // ✅ Custom panes
-    map.createPane("maskedPane");
-    map.getPane("maskedPane").style.zIndex = 650;
+        // ✅ Custom panes
+        map.createPane("maskedPane");
+        map.getPane("maskedPane").style.zIndex = 650;
 
-    map.createPane("topOverlay");
-    map.getPane("topOverlay").style.zIndex = 700;
+        map.createPane("topOverlay");
+        map.getPane("topOverlay").style.zIndex = 700;
 
-    // ✅ Basemap layers
-    const esriImagery = L.tileLayer(
-      "https://services.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}",
-      { attribution: "Tiles © Esri" }
-    ).addTo(map);
+        // ✅ Basemap layers
+        const esriImagery = L.tileLayer(
+        "https://services.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}",
+        { attribution: "Tiles © Esri" }
+        ).addTo(map);
 
-    const osmVector = L.tileLayer(
-      "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
-      { attribution: "© OpenStreetMap contributors" }
-    );
+        const osmVector = L.tileLayer(
+        "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
+        { attribution: "© OpenStreetMap contributors" }
+        );
 
-    // ✅ Road & label overlays in top pane
-    // const roads = L.tileLayer(
-    //   "https://services.arcgisonline.com/ArcGIS/rest/services/Reference/World_Transportation/MapServer/tile/{z}/{y}/{x}",
-    //   {
-    //     attribution: "© Esri Roads",
-    //     pane: "topOverlay"
-    //   }
-    // ).addTo(map);
+        // ✅ Road & label overlays in top pane
+        // const roads = L.tileLayer(
+        //   "https://services.arcgisonline.com/ArcGIS/rest/services/Reference/World_Transportation/MapServer/tile/{z}/{y}/{x}",
+        //   {
+        //     attribution: "© Esri Roads",
+        //     pane: "topOverlay"
+        //   }
+        // ).addTo(map);
 
-    const labelsOverlay = L.tileLayer(
-      "https://services.arcgisonline.com/ArcGIS/rest/services/Reference/World_Boundaries_and_Places/MapServer/tile/{z}/{y}/{x}",
-      {
-        attribution: "© Esri Labels",
-        pane: "topOverlay"
-      }
-    ).addTo(map);
+        const labelsOverlay = L.tileLayer(
+        "https://services.arcgisonline.com/ArcGIS/rest/services/Reference/World_Boundaries_and_Places/MapServer/tile/{z}/{y}/{x}",
+        {
+            attribution: "© Esri Labels",
+            pane: "topOverlay"
+        }
+        ).addTo(map);
 
-    // ✅ Layer control toggle
-    const baseMaps = {
-      "Satellite (Imagery)": esriImagery,
-      "Vector (Streets)": osmVector
-    };
+        // ✅ Layer control toggle
+        const baseMaps = {
+        "Satellite (Imagery)": esriImagery,
+        "Vector (Streets)": osmVector
+        };
 
-    const overlayMaps = {
-    //   "Roads": roads,
-      "Labels": labelsOverlay
-    };
+        const overlayMaps = {
+        //   "Roads": roads,
+        "Labels": labelsOverlay
+        };
 
-    L.control.layers(baseMaps, overlayMaps).addTo(map);
+        L.control.layers(baseMaps, overlayMaps).addTo(map);
 
-    fetch("/map2.geojson")
-      .then((res) => res.json())
-      .then((data) => {
-        const shadow = L.geoJSON(data, {
-            style: {
-              color: "red",
-              weight: 10,
-              opacity: 0.4,
-              fillOpacity: 0,
-              lineCap: "round",
-              lineJoin: "round"
-            }
-          }).addTo(map);
-          
-          // Main crisp border on top
-          const boundary = L.geoJSON(data, {
-            style: {
-              color: "orange",
-              weight: 2,
-              fillOpacity: 0,
-              opacity: 1,
+        fetch("/map2.geojson")
+        .then((res) => res.json())
+        .then((data) => {
+            const shadow = L.geoJSON(data, {
+                style: {
+                color: "red",
+                weight: 10,
+                opacity: 0.4,
+                fillOpacity: 0,
                 lineCap: "round",
-                lineJoin: "round",
-                
+                lineJoin: "round"
+                }
+            }).addTo(map);
+            
+            // Main crisp border on top
+            const boundary = L.geoJSON(data, {
+                style: {
+                color: "orange",
+                weight: 2,
+                fillOpacity: 0,
+                opacity: 1,
+                    lineCap: "round",
+                    lineJoin: "round",
+                    
+                }
+            }).addTo(map);
+
+            // map.fitBounds(boundary.getBounds());
+
+            const maskedMaxar = L.tileLayer.boundaryCanvas(
+            //   "/tiles2/tiles2/{z}/{x}/{y}.png",
+            "https://map-tiles1.s3.us-west-2.amazonaws.com/unzippedTiles/{z}/{x}/{y}.png",
+            {
+                boundary,
+                tms: true,
+                noWrap: true,
+                continuousWorld: false,
+                opacity: 1,
+                pane: "maskedPane",
+                attribution: "Maxar Imagery (masked)"
             }
-          }).addTo(map);
+            ).addTo(map);
 
-        // map.fitBounds(boundary.getBounds());
+            const esriRight = L.tileLayer(
+            "https://services.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}",
+            {
+                attribution: "Tiles © Esri"
+            }
+            ).addTo(map);
 
-        const maskedMaxar = L.tileLayer.boundaryCanvas(
-        //   "/tiles2/tiles2/{z}/{x}/{y}.png",
-          "https://map-tiles1.s3.us-west-2.amazonaws.com/unzippedTiles/{z}/{x}/{y}.png",
-          {
-            boundary,
-            tms: true,
-            noWrap: true,
-            continuousWorld: false,
-            opacity: 1,
-            pane: "maskedPane",
-            attribution: "Maxar Imagery (masked)"
-          }
-        ).addTo(map);
+            L.control.sideBySide(maskedMaxar, esriImagery).addTo(map);
+        });
 
-        const esriRight = L.tileLayer(
-          "https://services.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}",
-          {
-            attribution: "Tiles © Esri"
-          }
-        ).addTo(map);
-
-        L.control.sideBySide(maskedMaxar, esriImagery).addTo(map);
-      });
-
-    return () => {
-      map.remove();
-    };
+        return () => {
+        map.remove();
+        };
+    } );
   }, []);
 
   return <div ref={mapContainerRef} style={{ height: "100vh", width: "100%" }} />;
