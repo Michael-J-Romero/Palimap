@@ -51,7 +51,9 @@ const Wrapper = styled.div`
 
 const Layout = ({ children }) => {
   const theme = useTheme();
-  const fullScreen = usePathname() === '/map' || usePathname() === '/map/';
+  const fullScreen = 
+  usePathname() === '/map' || usePathname() === '/map/'
+  ||usePathname() === '/map2' || usePathname() === '/map2/';
   return (
     <ThemeProvider theme={theme}>
       <Wrapper fullScreen={fullScreen}>

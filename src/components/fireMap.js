@@ -102,9 +102,10 @@ function SplitMapComparison() {
     import("leaflet-side-by-side").then(() => {
         addPlugin();
         const map = L.map(mapContainerRef.current, {
-        center: [34.055, -118.55],
+        center: [34.051, -118.535],
         zoom: 14,
-        maxZoom: 22,
+        maxZoom: 18,
+        minZoom: 14,
         zoomControl: true,
         crs: L.CRS.EPSG3857
         });
