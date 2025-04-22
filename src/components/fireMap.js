@@ -104,7 +104,7 @@ function SplitMapComparison() {
         const map = L.map(mapContainerRef.current, {
         center: [34.051, -118.535],
         zoom: 14,
-        maxZoom: 18,
+        maxZoom: 19,
         minZoom: 14,
         zoomControl: true,
         crs: L.CRS.EPSG3857
@@ -219,7 +219,7 @@ function SplitMapComparison() {
     } );
   }, []);
 
-  return <div ref={mapContainerRef} style={{ height: "100vh", width: "100%" }} />;
+  return <div ref={mapContainerRef} style={{ height: "100%", width: "100%" }} />;
 }
 
 export default SplitMapComparison;

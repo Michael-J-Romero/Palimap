@@ -5,10 +5,14 @@ import styled from "styled-components";
 import React, { useState, useEffect, useRef } from "react";
 import Map1 from "./map";
 import List  from "./list";
+import dynamic from "next/dynamic";
+const SplitMap = dynamic(() => import("../../components/fireMap.js"), { ssr: false });
 
 let aa
  
 function App({allData,openLocation}) {
+  let [showFireMap, setShowFireMap] = useState(false);
+
 if (!allData) {
     allData = getData();
 }
@@ -55,9 +59,12 @@ if (!allData) {
   return (
     <Container 
      {...{
+      showFireMap,
+      setShowFireMap,
       selectedLocation,
-       Map:
-      <Map1 {...{openLocation,itemData, setSelectedLocation,selectedMarker, setSelectedMarker }} />,
+       Map: showFireMap ?
+       <SplitMap {...{openLocation,itemData, setSelectedLocation,selectedMarker, setSelectedMarker }} />
+       :<Map1 {...{openLocation,itemData, setSelectedLocation,selectedMarker, setSelectedMarker }} />,
       List: <List {...{openLocation,allData,itemData, selectedLocation,setSelectedLocation ,setSelectedMarker,selectedMarker,filterBy, setFilterBy}} />,
       Details: <Details {...{ selectedLocation,setSelectedLocation ,itemData }} />,
  
@@ -66,14 +73,34 @@ if (!allData) {
     </Container>
   );
 }
-function Container({ Map, Details, Footer,List,Header,selectedLocation }) {
+function Container({ Map, Details, Footer,List,Header,selectedLocation ,showFireMap, setShowFireMap }) {
   return (
     <StyledContainer> 
       <div className="horizontal-container"  style={{
         padding: selectedLocation !== null
         ? "0px" : "0px",
         }}>
-        <div className="map-container">
+        <div className="map-container"
+         style={{ 
+          position: "relative",
+         }}
+         >
+          <div 
+            style={{
+              position: "absolute",
+              top: 75,
+              left: 10,
+              zIndex: 10000000,
+            }} >
+            <button onClick={() => {
+              setShowFireMap(!showFireMap);
+            }}>
+              {/* checkbox */}
+              <input type="checkbox" checked={showFireMap} />
+              {/* text */}
+              { "Fire Map"}
+            </button>
+          </div>
           {Map}
         </div>
         <div className="list-container">
