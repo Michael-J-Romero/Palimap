@@ -25,6 +25,7 @@ const Header = () => {
 
 
     sx={{ 
+      // display: 'none !important',
     top: 0,
     backgroundColor: 'background.paper', 
     color: 'text.primary', 
@@ -55,11 +56,25 @@ const Header = () => {
         }}
         
     >
-      <Box sx={{ 
+      <Box 
+      onClick={() => router.push('/', undefined, { shallow: true })}
+      
+      sx={{ 
         flexGrow: 1,
         display: 'flex', 
         alignItems: 'center' 
         }}>
+          <img 
+          src="/logo.png"
+          alt="logo"
+          style={{
+          width: 45,
+          height: 45, 
+          marginLeft: -8,
+          // scale: 1.1,
+          marginRight: 8,
+          }}
+          />
       <Logo 
       //make clickable
       onClick={() => router.push('/', undefined, { shallow: true })}
@@ -73,7 +88,8 @@ cursor: 'pointer',
   }
 
       }}
-       color="primary">PaliMap
+       color="primary">
+        PaliMap
        </Logo>
        <Typography variant="subtitle" color="text.secondary" sx={{ ml: 2 }}>
        Rebuilding Together

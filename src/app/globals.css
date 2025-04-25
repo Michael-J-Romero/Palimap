@@ -10,6 +10,31 @@
   }
 }
 
+.pac-container{
+  z-index: 9999999 !important;
+}
+ 
+
+
+.leaflet-left .leaflet-tile-pane canvas {
+  background-color: transparent !important;
+}
+canvas {
+  background-color: transparent !important;
+}
+
+.leaflet-tile-pane canvas {
+  background-color: transparent !important;
+}
+.leaflet-tile-container {
+  z-index: 0;
+}
+
+.leaflet-pane {
+  z-index: 0;
+}
+
+
 html,
 body {
   max-width: 100vw;

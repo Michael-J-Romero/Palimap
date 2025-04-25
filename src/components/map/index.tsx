@@ -6,13 +6,50 @@ import React, { useState, useEffect, useRef } from "react";
 import Map1 from "./map";
 import List  from "./list";
 import dynamic from "next/dynamic";
-const SplitMap = dynamic(() => import("../../components/fireMap.js"), { ssr: false });
+import {Button, Drawer, IconButton, Box } from "@mui/material";
+import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
+import ChevronRightIcon from "@mui/icons-material/ChevronRight";
+import { useSearchParams, useRouter } from 'next/navigation';
+import LocationModal from '@/components/Location'; // Your modal
+import { useTheme } from "@mui/material/styles";
+
+const SplitMap = dynamic(() => import("../interactiveMap/index.js"), { ssr: false });
 
 let aa
- 
-function App({allData,openLocation}) {
-  let [showFireMap, setShowFireMap] = useState(false);
+function getScrollableParent(element) {
+  let parent = element.parentElement;
+  while (parent) {
+    const overflowY = window.getComputedStyle(parent).overflowY;
+    const isScrollable = (overflowY === 'auto' || overflowY === 'scroll');
+    if (isScrollable && parent.scrollHeight > parent.clientHeight) {
+      return parent;
+    }
+    parent = parent.parentElement;
+  }
+  return null;
+}
+function App({ slug,allData,showModal}) {
+  const [open, setOpen] = useState(true);
+  const theme = useTheme();
+  const router = useRouter();
+  let [showFireMap, setShowFireMap] = useState(true);
+  const openLocation = (slug: string) => {
+    router.push(`/map?location=${slug}`, undefined, { shallow: true });
+    setOpen(true);
+    setTimeout(() => {
+      const element = document.getElementsByClassName("swiper")[0];
+      console.log("element weee", element);
+      if (element) {
+        // element.scrollIntoView({ block: "start"  });
+        let container = getScrollableParent(element);
+        container.scrollTo({
+          top: 0,
+          left: 0,
+        });
 
+      }
+    }, 200);
+  };
 if (!allData) {
     allData = getData();
 }
@@ -59,13 +96,22 @@ if (!allData) {
   return (
     <Container 
      {...{
+   open, setOpen,
+      
       showFireMap,
       setShowFireMap,
       selectedLocation,
        Map: showFireMap ?
-       <SplitMap {...{openLocation,itemData, setSelectedLocation,selectedMarker, setSelectedMarker }} />
+       <SplitMap {...{open, setOpen,openLocation,itemData, setSelectedLocation,selectedMarker, setSelectedMarker }} />
        :<Map1 {...{openLocation,itemData, setSelectedLocation,selectedMarker, setSelectedMarker }} />,
-      List: <List {...{openLocation,allData,itemData, selectedLocation,setSelectedLocation ,setSelectedMarker,selectedMarker,filterBy, setFilterBy}} />,
+      List: showModal?
+      <LocationModal
+      slug={slug}
+      onClose={() => {
+        router.push('/map', undefined, { shallow: true }); // Remove query param
+      }}
+    />
+      :<List {...{openLocation,allData,itemData, selectedLocation,setSelectedLocation ,setSelectedMarker,selectedMarker,filterBy, setFilterBy}} />,
       Details: <Details {...{ selectedLocation,setSelectedLocation ,itemData }} />,
  
      }}
@@ -73,55 +119,144 @@ if (!allData) {
     </Container>
   );
 }
-function Container({ Map, Details, Footer,List,Header,selectedLocation ,showFireMap, setShowFireMap }) {
+
+
+function Container({ open, setOpen,Map, Details, Footer, List, Header, selectedLocation, showFireMap, setShowFireMap }) {
+  const [mapRef, setMapRef] = useState(null); // <-- pass this into Map
+const theme = useTheme();
+  // Fix Leaflet map sizing when toggling sidebar
+  useEffect(() => {
+    if (mapRef) {
+      // let w=setInterval(() => {
+      //   mapRef.invalidateSize();
+      // }, 1);
+      // let w2=setTimeout(() => {
+      //   clearInterval(w);
+      // } , 1000);
+      // return () => {
+      //   clearInterval(w2);
+      //   clearInterval(w);
+      //   clearTimeout(w2);
+      // };
+      // use animationFrame
+      let w
+      let fn = () => {
+        if (mapRef) {
+          mapRef.invalidateSize();
+        }
+        w = requestAnimationFrame(fn);
+      }
+      w = requestAnimationFrame(fn);
+      let w2 = setTimeout(() => {
+        cancelAnimationFrame(w);
+      }, 1000);
+
+      return () => {
+        clearTimeout(w2);
+        cancelAnimationFrame(w);
+      };
+    }
+  }, [open, mapRef]);
+
   return (
-    <StyledContainer> 
-      <div className="horizontal-container"  style={{
-        padding: selectedLocation !== null
-        ? "0px" : "0px",
-        }}>
-        <div className="map-container"
-         style={{ 
+    <Box
+      sx={{
+        display: "flex",
+        flexDirection: "row",
+        height: "100%",
+        width: "100%",
+        overflow: "hidden",
+        position: "relative",
+      }}
+    >
+      {/* Sidebar Panel */}
+      <Box
+        sx={{
+          width: open ? 450 : 10,
+          transition: "width 0.3s ease",
+          backgroundColor: "#222",
+          color: "#fff",
+          // overflow: "hidden",
           position: "relative",
-         }}
-         >
-          <div 
-            style={{
+        }}
+      >
+        {  (
+          <>
+             {List} 
+          </>
+        )}
+
+        {/* Vertical Toggle Tab (always visible) */}
+     
+<IconButton
+  onClick={() => setOpen(!open)}
+  sx={{
+    position: "absolute",
+    top: "50%",
+    right: -24,
+    transform: "translateY(-100%)",
+    color: theme.palette.text.primary,
+    backgroundColor: theme.palette.background.paper,
+    borderLeft: "1px solid "+ theme.palette.divider,
+    borderRadius: "0 4px 4px 0",
+    width: 28,
+    height: 64,
+    minWidth: 0,
+    padding: 0,
+    zIndex: 1000,
+    "&:hover": {
+      backgroundColor: theme.palette.background.paper,
+    }
+  }}
+>
+  {open ? (
+    <ChevronLeftIcon   />
+  ) : (
+    <ChevronRightIcon />
+  )}
+</IconButton>
+
+      </Box>
+
+      {/* Main Map Area */}
+      <Box
+        sx={{
+          flexGrow: 1,
+          position: "relative",
+          backgroundColor: "#333",
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+        }}
+      >
+        {/* Pass mapRef setter to the Map component */}
+        {React.cloneElement(Map, { setMapRef })}
+
+        {/* Overlay with Details */}
+        {selectedLocation && (
+          <Box
+            sx={{
               position: "absolute",
-              top: 75,
-              left: 10,
-              zIndex: 10000000,
-            }} >
-            <button onClick={() => {
-              setShowFireMap(!showFireMap);
-            }}>
-              {/* checkbox */}
-              <input type="checkbox" checked={showFireMap} />
-              {/* text */}
-              { "Fire Map"}
-            </button>
-          </div>
-          {Map}
-        </div>
-        <div className="list-container">
-          {List}
-        </div>
-        
-      </div>
-        <div className="overlay" style={{
-          display: selectedLocation !== null
-          ? "block" : "none",
-        }}>
-          <div className="details-container">
+              top: 0,
+              left: 0,
+              width: "100%",
+              height: "100%",
+              backgroundColor: "#333",
+              zIndex: 10,
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
+            }}
+          >
             {Details}
-          </div>
-        </div>
-      {/* <div className="footer-container">
-        {Footer}
-      </div> */}
-    </StyledContainer>
+          </Box>
+        )}
+      </Box>
+    </Box>
   );
 }
+
+
 
 const StyledContainer = styled.div`
   display: flex;

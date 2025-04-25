@@ -17,11 +17,11 @@ export default function LocationSlider({ images ,height}) {
         width: '100%',
         // height: { xs: 240, sm: 360, md: 420 },
         height: { xs: height/3, sm: height/2, md: height },
-        borderRadius: 2,
+        borderRadius: 1,
         //no top border radius
         // borderTopLeftRadius: 0,
         // borderTopRightRadius: 0,
-        mt: 3,
+        // mt: 3,
         overflow: 'hidden',
         boxShadow: 4,
         mb: 3,

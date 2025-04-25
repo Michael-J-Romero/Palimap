@@ -27,19 +27,12 @@ let themeBackground = theme.palette.background.paper;
       background: themeBackground,
       // background: 'green',
     }}>
-          <Container maxWidth="lg" 
-
-          sx={{ 
-            height: '100%',
-            // py: { xs: 4, md: 6 } 
-          }}
-          >
+         
       {/* <Box textAlign="center" mb={6}> */}
        
       <Details slug={slug} onClose={onClose} />
        
-      {/* </Box> */}
-</Container>
+      {/* </Box> */} 
     </div>
   );
 }

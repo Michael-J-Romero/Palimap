@@ -121,6 +121,7 @@ const tempData1 = [
   ];
   //allData
   const zIndex={
+    locationModal: 1000,
     map:999999,
     locationModal:10,
     header:1000,

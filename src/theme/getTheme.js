@@ -9,7 +9,9 @@ const getTheme = (mode = 'light') =>
         ? {
             // Light theme colors
             primary: {
-              main: '#1976d2',
+              // main: '#1976d2',
+              main:    '#5d8159',
+
             },
             secondary: {
               main: '#9c27b0',
@@ -29,7 +31,7 @@ const getTheme = (mode = 'light') =>
         : {
             // Dark theme colors
             primary: {
-              main: '#90caf9',
+              main: '#869e75',
             },
             secondary: {
               main: '#ce93d8',

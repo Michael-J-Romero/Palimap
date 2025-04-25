@@ -9,17 +9,17 @@ import getTheme from '@/theme/getTheme'; // dynamic MUI theme generator
 const ThemeContext = createContext();
 
 export const ThemeContextProvider = ({ children }) => {
-  const [mode, setMode] = useState('light'); // 'light' | 'dark'
+  const [mode, setMode] = useState('dark'); // 'light' | 'dark'
 
   useEffect(() => {
-    const storedMode = localStorage.getItem('themeMode');
+    const storedMode = localStorage.getItem('themeMode_1');
     if (storedMode) setMode(storedMode);
   }, []);
 
   const toggleTheme = () => {
     setMode((prev) => {
       const next = prev === 'light' ? 'dark' : 'light';
-      localStorage.setItem('themeMode', next);
+      localStorage.setItem('themeMode_1', next);
       return next;
     });
   };

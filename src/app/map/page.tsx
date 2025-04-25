@@ -29,14 +29,15 @@ export default function MapPage() {
     }
   }, [slug, router]);
 
-  const openLocation = (slug: string) => {
-    router.push(`/map?location=${slug}`, undefined, { shallow: true });
-  };
+  // const openLocation = (slug: string) => {
+  //   router.push(`/map?location=${slug}`, undefined, { shallow: true });
+  //   setOpen(true);
+  // };
 console.log('slug', slug,showModal)
   return (
     <>
       {/* Your actual map would go here */}
-      {showModal && slug && (
+      {false && showModal && slug && (
         <div    style={{ 
             zIndex: settings.zIndex.map,
             height: '100%',
@@ -57,7 +58,15 @@ console.log('slug', slug,showModal)
         />
         </div>
       )}
-      <Map openLocation={openLocation} />
+      <Map 
+      // openLocation={openLocation} showModal={showModal} slug={slug} 
+      {...{
+        // openLocation,
+        setShowModal,
+        showModal,
+        slug,//open, setOpen
+      }}
+      />
 
     </>
   );

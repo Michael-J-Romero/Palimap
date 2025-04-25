@@ -7,11 +7,18 @@ import {
   MenuItem,
   Chip,
   useTheme,
+  Button,
+  IconButton,
 } from "@mui/material";
-
+import AddIcon from "@mui/icons-material/Add";
 import SimpleBar from "simplebar-react";
-import {settings as allSettings} from '@/data/builtIn'
+import {settings as allSettings,types} from '@/data/builtIn'
+import NewPostButton from "../NewPost";
 const settings=allSettings
+
+
+
+
 function List({
   openLocation,
   allData,
@@ -29,7 +36,7 @@ function List({
     if (selectedMarker !== null) {
       const element = document.getElementById(`list-item-${selectedMarker}`);
       if (element) {
-        element.scrollIntoView({ behavior: "smooth", block: "nearest" });
+        // element.scrollIntoView({ behavior: "smooth", block: "nearest" });
       }
     }
   }, [selectedMarker]);
@@ -57,10 +64,11 @@ console.log("theme",theme)
           boxShadow: "1px 2px 4px rgba(0,0,0,0.28)",
           px: 1,
           py: 1,
-          // pt: 1,
+          pt: 1.3,
           display: "flex",
           gap: 2,
-          alignItems: "center",
+          alignItems: "space-between",  
+          justifyContent: "space-evenly",
           position: "sticky",
           top: 0,
           zIndex: settings.zIndex.mapListMenu,
@@ -69,11 +77,21 @@ console.log("theme",theme)
           // borderTop: `1px solid ${theme.palette.divider}`,
         }}
       >
+        {/* <img 
+        src="/logo.png"
+        alt="logo"
+        style={{
+          width: 40,
+          height: 40,
+          borderRadius: "50%",
+          scale: 1.5,
+          marginRight: 8,
+        }}
+        /> */}
         <Select 
          variant="outlined" 
           value={filterBy}
           onChange={(event) => {
-            alert("not functional yet");
             setFilterBy(event.target.value);
           }}
           size="small"
@@ -82,21 +100,29 @@ console.log("theme",theme)
             minWidth: 140,
           }}
         >
-          {[
-            "View All",
-            "Reconstruction",
-            "Help Wanted",
-            "Community Event",
-            "Business opening",
-            "Construction Update",
-            "Fire Recovery",
-            "Safety Alert",
-          ].map((label) => (
+          {
+          
+          // [
+          //   "View All",
+          //   "Reconstruction",
+          //   "Help Wanted",
+          //   "Community Event",
+          //   "Business opening",
+          //   "Construction Update",
+          //   "Fire Recovery",
+          //   "Safety Alert",
+          // ]
+          [ {
+              icon:"",
+              type: "View All",
+            
+          },...types,]
+          .map((e) => (
             <MenuItem
-              key={label}
-              value={label === "View All" ? "all" : label}
+              key={e.type}
+              value={e.type === "View All" ? "all" : e.type}
             >
-              {label}
+               {e.icon} {' '} {e.type}
             </MenuItem>
           ))}
         </Select>
@@ -113,6 +139,8 @@ console.log("theme",theme)
           <MenuItem value="title">By Title</MenuItem>
           <MenuItem value="type">By Type</MenuItem>
         </Select>
+        <NewPostButton />
+
       </Box>
 <SimpleBar style={{ maxHeight: "100vh" }}>
 
@@ -130,7 +158,13 @@ console.log("theme",theme)
           if (sortBy === "title") return a.title.localeCompare(b.title);
           return a.type.localeCompare(b.type);
         })
-        .map((location) => {
+        .filter((location) => {
+          if (filterBy === "all") return true;
+          if (filterBy === "View All") return true;
+          if (location.type === filterBy) return true;
+          return false;
+        })
+        .map((location) => { 
           const isSelected = selectedMarker === 1 + location.id;
 
           return (
@@ -187,6 +221,7 @@ console.log("theme",theme)
                     flexWrap: "wrap",
                   }}
                 >
+                  
                   <Typography
                     variant="subtitle1"
                     fontWeight={500}
@@ -196,23 +231,24 @@ console.log("theme",theme)
                     {location.title}
                   </Typography>
 
-                  <Chip
-                    label={
-                      <Box sx={{ display: "flex", alignItems: "center", gap: 0.5 }}>
-                        {location.icon} {location.type}
-                      </Box>
-                    }
-                    size="small"
-                    sx={{
-                      bgcolor:
-                        theme.palette.mode === "dark"
-                          ? theme.palette.grey[800]
-                          : theme.palette.grey[200],
-                      color: theme.palette.text.primary,
-                      fontWeight: 500,
-                    }}
-                  />
+                  
                 </Box>
+                  {/* address */}
+                  <Typography
+                    variant="body2"
+                    color="text.secondary"
+                    sx={{
+                      overflow: "hidden",
+                      textOverflow: "ellipsis",
+                      display: "-webkit-box",
+                      WebkitBoxOrient: "vertical",
+                      WebkitLineClamp: 1,
+                      fontSize: "0.875rem",
+                      lineHeight: 1.4,
+                    }}
+                  >
+                    {location.address || "1234 Main St, Los Angeles, CA 90001"}
+                  </Typography>
 
                 <Typography
                   variant="caption"
@@ -241,6 +277,23 @@ console.log("theme",theme)
             </Box>
           );
         })}
+      {allData.length === 0 && (
+        <Box
+          sx={{
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+            height: "100%",
+            color: theme.palette.text.secondary,
+          }}
+        >
+          <Typography variant="body2" color="text.secondary">
+            No locations found.
+          </Typography>
+
+            
+        </Box>
+        )}
         </Box>
   </SimpleBar>
     </Box>
