@@ -35,7 +35,7 @@ function SplitMapComparison(props) {
   const mapContainerRef = useRef(null);
   const mapRef = useRef(null);
   const basemapLayer = useRef(null);
-  const [mapMode, setMapMode] = useState("map");
+  const [mapMode, setMapMode] = useState("satellite");
 
   
   const basemaps = {
@@ -194,18 +194,18 @@ function SplitMapComparison(props) {
         <Paper elevation={3} sx={{ borderRadius: 2 }}>
           <ButtonGroup variant="contained">
             <Button
-              onClick={() => setMapMode("map")}
-              color={  "inherit"}
-              sx={tabStyle("map")}
-              >
-              Map
-            </Button>
-            <Button
               onClick={() => setMapMode("satellite")}
               color={  "inherit"}
               sx={tabStyle("satellite")}
                         >
               Satellite
+            </Button>
+            <Button
+              onClick={() => setMapMode("map")}
+              color={  "inherit"}
+              sx={tabStyle("map")}
+              >
+              Map
             </Button>
             <Button
               onClick={() => setMapMode("active")}

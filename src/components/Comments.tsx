@@ -37,7 +37,8 @@ export default function Main() {
       />
     </Stack>
 
-    <Button variant="contained" fullWidth sx={{ mb: 2 }}>
+    <Button variant="outlined" 
+     fullWidth sx={{ mb: 2 }}>
       Post Comment
     </Button>
 
