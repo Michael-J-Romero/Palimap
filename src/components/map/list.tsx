@@ -29,8 +29,20 @@ function List({
   filterBy,
   setFilterBy,
 }) {
-  const theme = useTheme();
   const [sortBy, setSortBy] = useState("date");
+  let data=allData
+  .sort((a, b) => {
+    if (sortBy === "date") return new Date(b.date) - new Date(a.date);
+    if (sortBy === "title") return a.title.localeCompare(b.title);
+    return a.type.localeCompare(b.type);
+  })
+  .filter((location) => {
+    if (filterBy === "all") return true;
+    if (filterBy === "View All") return true;
+    if (location.type === filterBy) return true;
+    return false;
+  })
+  const theme = useTheme();
 
   useEffect(() => {
     if (selectedMarker !== null) {
@@ -152,18 +164,7 @@ console.log("theme",theme)
         }}
         >
       {/* List Items */}
-      {allData
-        .sort((a, b) => {
-          if (sortBy === "date") return new Date(b.date) - new Date(a.date);
-          if (sortBy === "title") return a.title.localeCompare(b.title);
-          return a.type.localeCompare(b.type);
-        })
-        .filter((location) => {
-          if (filterBy === "all") return true;
-          if (filterBy === "View All") return true;
-          if (location.type === filterBy) return true;
-          return false;
-        })
+      {data
         .map((location) => { 
           const isSelected = selectedMarker === 1 + location.id;
 
@@ -224,9 +225,12 @@ console.log("theme",theme)
                   
                   <Typography
                     variant="subtitle1"
-                    fontWeight={500}
-                    lineHeight={1.3}
+                    fontWeight={100}
+                    lineHeight={1.2}
                     noWrap
+                    sx={{
+                      fontFamily: "system-ui",
+                    }}
                   >
                     {location.title}
                   </Typography>
@@ -244,7 +248,8 @@ console.log("theme",theme)
                       WebkitBoxOrient: "vertical",
                       WebkitLineClamp: 1,
                       fontSize: "0.875rem",
-                      lineHeight: 1.4,
+                      fontWeight: 500,
+                      lineHeight: 1.2,
                     }}
                   >
                     {location.address || "1234 Main St, Los Angeles, CA 90001"}
@@ -253,7 +258,10 @@ console.log("theme",theme)
                 <Typography
                   variant="caption"
                   color="text.secondary"
-                  sx={{ mb: 0.5 }}
+                  sx={{ 
+                    opacity: 0.8,
+                    mt: 0.7
+                  }}
                 >
                   {location.date}
                 </Typography>
@@ -277,7 +285,6 @@ console.log("theme",theme)
             </Box>
           );
         })}
-      {allData.length === 0 && (
         <Box
           sx={{
             display: "flex",
@@ -286,14 +293,21 @@ console.log("theme",theme)
             height: "100%",
             color: theme.palette.text.secondary,
           }}
-        >
+          >
           <Typography variant="body2" color="text.secondary">
-            No locations found.
+          {data.length === 0 ? (
+            'No locations found.'
+          )
+        : (
+            <span style={{ opacity: 0.7 }}>
+              end of results
+            </span>
+          )
+        }
           </Typography>
 
             
         </Box>
-        )}
         </Box>
   </SimpleBar>
     </Box>

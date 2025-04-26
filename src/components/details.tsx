@@ -182,7 +182,7 @@ export default function Details({ slug, onClose }) {
                     textDecoration: "underline",
                     cursor: "pointer",
                     fontWeight: 500,
-                    color: theme.palette.primary.main 
+                    color: theme.palette.secondary.main 
                   }}
                   href="#user" target="_blank" rel="noopener noreferrer">
                     Michael Romero
@@ -213,6 +213,13 @@ export default function Details({ slug, onClose }) {
           >
             {data.body}
             {placeholder}
+            <br />
+            <br />
+
+            {placeholder}
+            <br />
+            <br />
+            {data.body}
           </Typography>
 
           {/* Comments */}
