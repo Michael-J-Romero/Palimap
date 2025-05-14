@@ -71,7 +71,7 @@ const Nav = () => {
   const navLinks = [
     { label: 'Interactive Map', href: '/map' },
     { label: 'Community', href: '/community' },
-    { label: 'Contribute', href: '/contribute' },
+    { label: 'Resources', href: '/resources' },
   ];
 
   const handleTabChange = (e, newValue) => {
@@ -125,7 +125,11 @@ const Nav = () => {
         </>
       ) : (
         <>
-          <StyledTabs value={pathname} onChange={handleTabChange}>
+          <StyledTabs value={
+              pathname.startsWith('/community') ? '/community' :
+              pathname
+              } 
+          onChange={handleTabChange}>
             {navLinks.map(({ label, href }) => (
               <StyledTab key={href} value={href} label={label} />
             ))}

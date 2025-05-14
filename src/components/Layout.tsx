@@ -1,5 +1,5 @@
-// components/Layout.jsx
 'use client';
+// components/Layout.jsx
 
 import React from 'react';
 import { CssBaseline, Container } from '@mui/material';
@@ -8,7 +8,7 @@ import Nav from './Nav';
 import Footer from './Footer';
 import styled, { ThemeProvider } from 'styled-components';
 import { useTheme } from '@mui/material/styles';
-import { usePathname } from 'next/navigation';
+import { usePathname} from 'next/navigation';
 
 
 import { useAuth } from '@/context/AuthContext';
@@ -32,7 +32,7 @@ const AdminToggle = () => {
  
 
 const Main = styled.main`
-  height: 100%;
+  height: 100% !important;
 
   flex: 1;
 //   padding: 2rem 0;
@@ -41,22 +41,27 @@ const Main = styled.main`
 const Wrapper = styled.div`
   display: flex;
   flex-direction: column;
-  //full screen if fullScreen is true
   min-height: 100vh;
-  height: ${(props) => (props.fullScreen ? '100vh' : '100%')};
-  
-  background-color: ${(props) => props.theme.palette.background.default};
-  color: ${(props) => props.theme.palette.text.primary};
+ 
+  height: 100%;
+  &.fullscreen {
+    height: 100vh;
+    overflow: hidden;
+  }
+
 `;
 
 const Layout = ({ children }) => {
   const theme = useTheme();
+  const pathname = usePathname();
   const fullScreen = 
-  usePathname() === '/map' || usePathname() === '/map/'
-  ||usePathname() === '/map2' || usePathname() === '/map2/';
+  pathname === '/map' || pathname === '/map/'
+  ||pathname === '/'
+  ||pathname === '/map2' || pathname === '/map2/'
+  || pathname?.startsWith('/community')
   return (
     <ThemeProvider theme={theme}>
-      <Wrapper fullScreen={fullScreen}>
+      <Wrapper className={fullScreen ? 'fullscreen' : ''}>
         {/* <CssBaseline /> */}
         <div style={{
           position: 'absolute',
@@ -67,18 +72,25 @@ zIndex: 99999999,
 {/* <AdminToggle/> */}
         </div>
         <Header />
+        <div style = {{
+          overflow: fullScreen ? 'hidden' : 'auto',
+          height: '100%',
+
+        }}>
         <Container 
         //make fullscreen 
         sx={{ 
+          // height: '100%',
+          ...fullScreen ? { height: '100%' } : { },
           maxWidth: fullScreen ? '100%!important' : 'lg' , 
-          height: '100%',
-          overflow: fullScreen ? 'hidden' : 'auto',
         }}
-        maxWidth="lg" 
+        maxWidth="md" 
         disableGutters={fullScreen}>
-          <Main >{children}</Main>
+          <Main >{children}
+          </Main>
         </Container>
         {(!fullScreen) && <Footer />}
+        </div>
       </Wrapper>
     </ThemeProvider>
   );

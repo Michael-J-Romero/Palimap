@@ -1,5 +1,7 @@
-"use client";
-import React from 'react';
-export default function Page() {
-    return <div>Community Page</div>;
-}  // Placeholder for page.tsx
+// app/community/page.jsx
+'use client';
+import { redirect } from 'next/navigation';
+
+export default function CommunityRoot() {
+  redirect('/community/board');
+}

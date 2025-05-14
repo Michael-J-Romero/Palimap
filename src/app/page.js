@@ -20,7 +20,7 @@ import AttachMoneyIcon from '@mui/icons-material/AttachMoney';
 import MapOutlinedIcon from '@mui/icons-material/MapOutlined';
 import EditLocationAltIcon from '@mui/icons-material/EditLocationAlt';
 import WifiTetheringIcon from '@mui/icons-material/WifiTethering';
-
+import Footer from "@/components/Footer";
 import { useTheme } from "@mui/material/styles";
 import MapIcon from "@mui/icons-material/Map";
 import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
@@ -124,7 +124,7 @@ import HeroSlideshow from "@/components/HeroSlideshow";
           // height: isSm ? 200 : 300,
           maxHeight: '50vh',
           position: 'relative',
-          borderRadius: 2,
+          // borderRadius: 2,
           overflow: 'hidden',
           boxShadow: 2,
         }}
@@ -172,9 +172,11 @@ const imgs = [
 const HomepageBody = () => {
   const theme = useTheme();
   return (
-    <Container maxWidth="lg" sx={{
-      pt: { xs: 2, md: 4 },
-      pb: { xs: 2, md: 4 },
+    <div maxWidth="lg" style={{
+      height: "100%",
+      overflow: "auto",
+      // pt: { xs: 2, md: 4 },
+      // pb: { xs: 2, md: 4 },
 
     }}>
       {/* Hero Section */}
@@ -185,7 +187,7 @@ const HomepageBody = () => {
       />
 
       {/* How it works */}
-
+<Container maxWidth="md">
       <Grid container spacing={4} mb={6}>
         {[
           {
@@ -279,9 +281,11 @@ const HomepageBody = () => {
           </Grid>
         ))}
       </Grid>
+        <Divider />
+{/* <br/> */}
 
       {/* show categories as chips */}
-      <Box mb={4} textAlign="left">
+      <Box my={4} textAlign="left">
         <Stack mt={0} direction="row"  flexWrap="wrap">
         <Typography variant="h5" fontWeight="bold" gutterBottom mr={2}>
           Find Posts by Category: 
@@ -317,6 +321,8 @@ const HomepageBody = () => {
         </Button>
       </Box>
     </Container>
+      <Footer />
+    </div>
   );
 };
 function HeroSectione({

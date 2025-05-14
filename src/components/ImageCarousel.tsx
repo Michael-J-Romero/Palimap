@@ -60,7 +60,7 @@ export default function LocationSlider({ images ,height}) {
       <style jsx global>{`
         .swiper-button-prev,
         .swiper-button-next {
-          color: ${isDark ? '#fff' : '#000'};
+          color: #fff;
           top: 50%;
           width: 40px;
           height: 40px;
@@ -69,13 +69,16 @@ export default function LocationSlider({ images ,height}) {
           backdrop-filter: blur(4px);
         }
 
-        .swiper-pagination-bullet {
-          background: ${isDark ? '#aaa' : '#444'};
-          opacity: 0.7;
-        }
+        // .swiper-pagination-bullet {
+        //   background: ${isDark ? '#aaa' : '#444'};
+        //   // opacity: 0.7;
+        // }
 
+        .swiper-pagination-bullet{
+          background: #fff9;
+        }
         .swiper-pagination-bullet-active {
-          background: ${theme.palette.primary.main};
+          background: #fffb;
         }
       `}</style>
     </Box>

@@ -10,8 +10,8 @@ import {settings as allSettings} from '@/data/builtIn'
 import { APIProvider, Map,useMap } from "@vis.gl/react-google-maps";
 
 const settings=allSettings
-function InnerLayout({ children }) {
-  const { theme } = useThemeContext();
+function InnerLayout({ children,themeFromCookie }) {
+  const { theme } = useThemeContext(themeFromCookie);
   return (
     <MuiThemeProvider theme={theme}>
       {/* <CssBaseline /> */}
@@ -27,13 +27,13 @@ function InnerLayout({ children }) {
   );
 }
 
-export default function RootLayout({ children }) {
+export default function RootLayout({themeFromCookie, children }) {
   return (
     <html lang="en">
       <body>
         {/* <AWSProvider>*/}
         <AuthProvider> 
-            <ThemeContextProvider>
+            <ThemeContextProvider themeFromCookie={themeFromCookie}>
               <InnerLayout>{children}</InnerLayout>
             </ThemeContextProvider>
           </AuthProvider>

@@ -4,6 +4,10 @@
     "baseUrl": ".", // root of project
     "paths": {
       "@/*": ["src/*"]
-    }
-  }
+    },
+    "checkJs": true,
+    "jsx": "preserve"
+  },
+  "exclude": ["node_modules"]
 }
+ 

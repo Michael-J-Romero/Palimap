@@ -101,13 +101,10 @@ export default function Marker({theme, data, selectedMarker, setSelectedMarker, 
   
   const id = 1 + data.id;
   const isSelected = externalState.selectedMarker === id;
-  console.log("Marker", data, selectedMarker, externalState, isSelected, id);
 
   useEffect(() => {
-        console.log("fdsa", bindTrigger);
     if (bindTrigger) {
       bindTrigger((incoming) => {
-        console.log("incoming", incoming);
         setExternalState((prev) => ({ ...prev, ...incoming }));
       });
     }
@@ -132,10 +129,19 @@ export default function Marker({theme, data, selectedMarker, setSelectedMarker, 
       zIndex: isSelected ? 1000 : 1,
       position: "relative", width: bubbleSize, height: bubbleSize }}
     onMouseDown={(e) => {
+      e.stopPropagation();
+      e.preventDefault();
       e.currentTarget.dataset.startX = e.clientX;
       e.currentTarget.dataset.startY = e.clientY;
     }}
+    // click
+    onClick={(e) => {
+      e.stopPropagation();
+      e.preventDefault();
+    }}
     onMouseUp={(e) => {
+      e.stopPropagation();
+      e.preventDefault();
       const startX = parseFloat(e.currentTarget.dataset.startX || "0");
       const startY = parseFloat(e.currentTarget.dataset.startY || "0");
       const dist = Math.sqrt((e.clientX - startX) ** 2 + (e.clientY - startY) ** 2);
@@ -148,16 +154,16 @@ export default function Marker({theme, data, selectedMarker, setSelectedMarker, 
     >
       <HoverZone
         onMouseEnter={() => {
-          if (!isSelected) {
+          // if (!isSelected) {
             setHovered(true);
             externalState.setSelectedMarker(id);
-          }
+          // }
         }}
         onMouseLeave={() => {
-          if (isSelected) {
+          // if (isSelected) {
             setHovered(false);
             externalState.setSelectedMarker(null);
-          }
+          // }
         }}
       />
       <MarkerWrap $hovered={hovered || isSelected} isWider={isWider}>

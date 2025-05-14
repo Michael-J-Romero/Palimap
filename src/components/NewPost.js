@@ -20,85 +20,13 @@ import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import dayjs from "dayjs";
 import {types} from '@/data/builtIn'
+import AddressAutocomplete from "./searchAdress";
 
 const categories = types//.map((type) => type.name);
 // const categories = ["Fire", "Flood", "Earthquake", "Other"];
 
-function AddressAutocomplete({ value, onChange }) {
-  const inputRef = useRef(null);
-  const autocompleteRef = useRef(null);
 
-  useEffect(() => {
-    const style = document.createElement("style");
-  style.innerHTML = `
-    .pac-container {
-      display: block !important;
-      width: auto !important;
-      z-index: 9999 !important;
-    }
-  `;
-  document.head.appendChild(style);
-  
-    if (window.google && window.google.maps && !autocompleteRef.current && inputRef.current) {
-      autocompleteRef.current = new window.google.maps.places.Autocomplete(inputRef.current, {
-        types: ["geocode"],
-        componentRestrictions: { country: "us" },
-      });
-
-      autocompleteRef.current.addListener("place_changed", () => {
-        const place = autocompleteRef.current.getPlace();
-        if (place?.formatted_address) {
-          onChange(place.formatted_address, place);
-        }
-      });
-    }
-    return () => {
-        document.head.removeChild(style);
-      };
-  }, []);
-
-  return (<Box sx={{ 
-    padding: "16px 0",
-    display: "flex", flexDirection: "row", alignItems: "baseline", marginBottom: "16px",justifyContent: "center" }}>
-    <div>
-    Address: 
-    </div>
-    <input
-        ref={inputRef}
-        type="text"
-        value={value}
-        placeholder="Start typing an address"
-        onChange={(e) => onChange(e.target.value)}
-        style={{
-          width: "100%",
-          padding: "8px",
-          borderRadius: "4px",
-          border: "1px solid #ccc",
-          boxSizing: "border-box",
-          marginBottom: "16px",
-        }}
-    /></Box>
-
-    // <TextField
-    //   fullWidth
-    //   inputRef={inputRef}
-    //   value={value}
-    //   label="Address"
-    //   placeholder="Start typing an address"
-    //   onChange={(e) => onChange(e.target.value)}
-    //   margin="normal"
-
-
-    //   sx={{
-    //     position: "relative", // Ensure dropdown is anchored correctly
-    //     zIndex: 1000          // Lift above any overlays
-    //   }}
-    // />
-  );
-}
-
-export default function NewPostButton() {
-  const theme = useTheme();
+export default function NewPostButton({ButtonComponent}) {
   const [open, setOpen] = useState(false);
   const [form, setForm] = useState({
     title: "",
@@ -123,40 +51,11 @@ export default function NewPostButton() {
     setForm((prev) => ({ ...prev, address }));
     // optionally also store lat/lng: place.geometry?.location.lat() / lng()
   };
-
+const ButtonComponentUsed = ButtonComponent || ButtonComponentDefault;
   return (
     <>
-      <Button
-        onClick={() => setOpen(true)}
-        variant="contained"
-        startIcon={<AddIcon />}
-        sx={{
-          whiteSpace: "nowrap",
-          width: "max-content",
-          px: 2,
-          py: 1,
-          borderRadius: 3,
-          textTransform: "none",
-          fontWeight: 600,
-          boxShadow: theme.shadows[3],
-          bgcolor: theme.palette.primary.main,
-          color: theme.palette.primary.contrastText,
-          transition: "transform 0.15s ease, box-shadow 0.15s ease",
-          "&:hover": {
-            bgcolor: theme.palette.primary.dark,
-            transform: "translateY(-1px)",
-            boxShadow: theme.shadows[6],
-          },
-          "&:active": {
-            transform: "translateY(0)",
-            boxShadow: theme.shadows[2],
-          },
-        }}
-      >
-        <Typography variant="button" fontWeight={600}>
-          New Post
-        </Typography>
-      </Button>
+      <ButtonComponentUsed onClick={() => setOpen(true)}/>
+
 
       <Dialog open={open} onClose={() => setOpen(false)} maxWidth="sm" fullWidth>
         <DialogTitle sx={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
@@ -274,4 +173,41 @@ export default function NewPostButton() {
       </Dialog>
     </>
   );
+}
+
+const ButtonComponentDefault = ({onClick}) => {
+
+  const theme = useTheme();
+
+  return <Button
+        onClick={onClick}
+        variant="contained"
+        startIcon={<AddIcon />}
+        sx={{
+          whiteSpace: "nowrap",
+          width: "max-content",
+          px: 2,
+          py: 1,
+          borderRadius: 3,
+          textTransform: "none",
+          fontWeight: 600,
+          boxShadow: theme.shadows[3],
+          bgcolor: theme.palette.primary.main,
+          color: theme.palette.primary.contrastText,
+          transition: "transform 0.15s ease, box-shadow 0.15s ease",
+          "&:hover": {
+            bgcolor: theme.palette.primary.dark,
+            transform: "translateY(-1px)",
+            boxShadow: theme.shadows[6],
+          },
+          "&:active": {
+            transform: "translateY(0)",
+            boxShadow: theme.shadows[2],
+          },
+        }}
+      >
+        <Typography variant="button" fontWeight={600}>
+          New Post
+        </Typography>
+      </Button>
 }

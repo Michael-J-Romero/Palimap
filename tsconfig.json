@@ -12,24 +12,27 @@
       "esnext"
     ],
     "allowJs": true,
+    "checkJs": true,
     "skipLibCheck": true,
     "strict": false,
-    "forceConsistentCasingInFileNames": true,
     "noEmit": true,
-    "incremental": true,
     "esModuleInterop": true,
     "moduleResolution": "node",
     "resolveJsonModule": true,
-    "isolatedModules": true,
     "jsx": "preserve",
-    "noUnusedLocals": true,
-    "noUnusedParameters": true,
+    "module": "esnext"
+    // 🔥 Removed:
+    // "noUnusedLocals"
+    // "noUnusedParameters"
+    // "isolatedModules"
+    ,
+    "incremental": true,
+    "isolatedModules": true,
     "plugins": [
       {
         "name": "next"
       }
-    ],
-    "module": "esnext"
+    ]
   },
   "include": [
     "next-env.d.ts",

@@ -1,8 +1,40 @@
 "use client";
 
 import L from "leaflet";
+let count = 0
+const DAMAGE_LEVELS = {
+//     Destroyed (>50%)
+// Major (26-50%)
+// Minor (10-25%)
+// Affected (1-9%)
+    "Destroyed (>50%)": 4,
+    "Major (26-50%)": 3,
+    "Minor (10-25%)": 2,
+    "Affected (1-9%)": 1,
 
-function makeFireMap(map, fn,options) {
+    "No Damage": 0,
+  };
+
+  const DAMAGE_COLORS = {
+    4: '#ff0000', // red
+    3: '#ff7300', // orange
+    2: '#ffcc00', // light orange    
+    1: '#c5ff55', // yellowish green
+    0: '#00cc00', // green
+  };
+function getRadius(zoom) {
+    if (zoom >= 20) return 15;
+    if (zoom >= 19) return 11;
+    if (zoom >= 18) return 8;
+    if (zoom >= 17) return 6;
+    if (zoom >= 16) return 4;
+    if (zoom >= 15) return 3;
+    if (zoom >= 14) return 2;
+    return 1;
+}
+
+
+function makeFireMap2(map, fn,options) {
     let cleaner = () => {};
     const {borderOnly} = options;
     map.createPane("maskedPane");
@@ -38,9 +70,22 @@ function makeFireMap(map, fn,options) {
             if (borderOnly) {
                 // return 
             }
+
+
+            // const noaaLayer = L.tileLayer(
+            //     {
+            //       attribution: 'Imagery © NOAA NGS Emergency Response',
+            //       maxZoom: 20,
+            //       opacity: 1
+            //     }
+            //   ).addTo(map);
+
+
             const maskedMaxar = L.tileLayer.boundaryCanvas(
                 "https://map-tiles1.s3.us-west-2.amazonaws.com/unzippedTiles/{z}/{x}/{y}.png",
+                // 'https://storms.ngs.noaa.gov/storms/tiles/20250128a_RGB/{z}/{x}/{y}.png',
                 {
+                    maxZoom: 20,
                     boundary,
                     tms: true,
                     noWrap: true,
@@ -79,4 +124,29 @@ function makeFireMap(map, fn,options) {
         });
     return ()=>cleaner();
 }
-export default makeFireMap;
+
+function parcelStyle(zoom,color,hover=false){
+    return {
+        weight: zoom < 18 ? 1 : 2,
+        fillColor: color,
+        color: color,
+        // transitionDuration: "0.2s",
+
+        ...hover?
+    {
+        weight: 2,
+        fillOpacity: 0.6,
+        opacity: .8,
+    }
+    :
+    {
+       color: '#000000',
+    // color: color,
+        // color: '#000000',
+
+               fillOpacity: 0.2,
+               opacity: 1,
+   }
+}
+}   
+export default makeFireMap2;

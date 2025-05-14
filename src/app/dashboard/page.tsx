@@ -41,7 +41,6 @@ const DashboardPage = () => {
 
   return (
     <Box sx={{ display: 'flex', minHeight: '100vh', bgcolor: 'background.default' }}>
-      https://stacindex.org/catalogs/maxar-open-data-catalog-ard-format#/item/3ASjitMxUyc5THh8EmvKnoRZFbf1utN21NbV91oMefNNSnEjwmdXSsi667HzHB/EhasWoEgo6keehwcHhSM8e8DJ1EFG7zXRNE5wLVmPhfkiJrXwMdvaYyBTSqsXcjiWkNYt9VKdkhcLzVNATG9zEDNqKfJDJbAYZwAqxxouEnxE7ZjrBih2KzHaAq/KZHdnKcdvXLPR3bQV2t82VTpkc4VFoYyHuUhR3BRYP2Rhwte8uGf7MUV27iHLL7V4ct3oTvdRZLt9nKvpc24Wktw35upv1cAnvdu2XWWiKvMWBcq?si=2&t=1#19/34.044768/-118.520043
       {/* Sidebar */}
       <Paper elevation={3} sx={{ width: 240, p: 2 }}>
         <Typography variant="h6" gutterBottom>

@@ -5,7 +5,7 @@ import { useRouter } from 'next/navigation';
 import { CssBaseline, Container ,Box} from '@mui/material';
 import { useTheme } from '@mui/material/styles';
 import Details from '../details';
-export default function LocationModal({ slug, onClose }) {
+export default function LocationModal({ pageData,onClose }) {
   const router = useRouter();
 
   useEffect(() => {
@@ -30,7 +30,7 @@ let themeBackground = theme.palette.background.paper;
          
       {/* <Box textAlign="center" mb={6}> */}
        
-      <Details slug={slug} onClose={onClose} />
+      <Details pageData = {pageData} onClose={onClose} />
        
       {/* </Box> */} 
     </div>

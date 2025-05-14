@@ -8,18 +8,20 @@ import getTheme from '@/theme/getTheme'; // dynamic MUI theme generator
 
 const ThemeContext = createContext();
 
-export const ThemeContextProvider = ({ children }) => {
-  const [mode, setMode] = useState('dark'); // 'light' | 'dark'
+export const ThemeContextProvider = ({ themeFromCookie,children }) => {
+  const [mode, setMode] = useState(themeFromCookie||'dark'); // 'light' | 'dark'
 
   useEffect(() => {
-    const storedMode = localStorage.getItem('themeMode_1');
-    if (storedMode) setMode(storedMode);
+    // const storedMode = localStorage.getItem('themeMode_1');
+    // if (storedMode) setMode(storedMode);
   }, []);
 
   const toggleTheme = () => {
     setMode((prev) => {
       const next = prev === 'light' ? 'dark' : 'light';
-      localStorage.setItem('themeMode_1', next);
+      // localStorage.setItem('themeMode_1', next);
+      // document.cookie = `theme=dark; path=/; max-age=31536000`;
+      document.cookie = `theme=${next}; path=/; max-age=31536000`;
       return next;
     });
   };

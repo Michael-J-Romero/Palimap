@@ -1,0 +1,192 @@
+{
+  "Fire Recovery Assistance": {
+    "description": "Start here if you\u2019ve been directly impacted. These resources offer direct support for housing, aid, and recovery services.",
+    "items": [
+      {
+        "title": "California Wildfire Recovery Portal",
+        "description": "Official state hub for recovery info, aid, and contacts.",
+        "link": "https://wildfirerecovery.caloes.ca.gov/"
+      },
+      {
+        "title": "LA County Household Relief Grant",
+        "description": "One-time cash grants ($6K\u2013$18K) for households hardest-hit by the fires.",
+        "link": "https://dcba.lacounty.gov/household-relief-grant/"
+      },
+      {
+        "title": "Disaster Assistance Application Portal",
+        "description": "Apply for federal disaster assistance online.",
+        "link": "https://www.disasterassistance.gov/"
+      },
+      {
+        "title": "211 LA / Airbnb.org Emergency Housing",
+        "description": "Emergency shelter coordinated through Airbnb and local partnerships.",
+        "link": "https://211la.org/"
+      }
+    ]
+  },
+  "Rebuilding & Permits": {
+    "description": "From permits to defensible space, these guides help you take the first steps toward rebuilding.",
+    "items": [
+      {
+        "title": "California Building Officials \u2013 Wildfire Recovery Hub",
+        "description": "Stay informed on current wildfire activity and recovery efforts.",
+        "link": "https://www.calbo.org/wildfire-recovery-hub"
+      },
+      {
+        "title": "CAL FIRE Rebuild Guide",
+        "description": "Steps for safe rebuilding and defensible space compliance.",
+        "link": "https://www.readyforwildfire.org/"
+      }
+    ]
+  },
+  "Mental Health Support": {
+    "description": "Emotional recovery is just as important. These services can help you and your loved ones navigate grief, trauma, and stress.",
+    "items": [
+      {
+        "title": "CalHOPE Support Line",
+        "description": "Free emotional support for Californians affected by disaster.",
+        "link": "https://www.calhope.org/"
+      },
+      {
+        "title": "NAMI California",
+        "description": "Peer support and resources for mental health recovery.",
+        "link": "https://namica.org/"
+      },
+      {
+        "title": "Disaster Distress Helpline",
+        "description": "24/7 confidential support for people experiencing emotional distress due to disasters.",
+        "link": "https://www.samhsa.gov/find-help/disaster-distress-helpline"
+      },
+      {
+        "title": "L.A. County Department of Mental Health \u2013 Disaster Services",
+        "description": "Provides emergency psychiatric intervention and clinical services to persons in crisis.",
+        "link": "https://dmh.lacounty.gov/our-services/disaster-services/disaster-mh-resources/"
+      }
+    ]
+  },
+  "Legal & Financial Aid": {
+    "description": "Understand your rights and options. These links connect you with legal and financial help for wildfire recovery.",
+    "items": [
+      {
+        "title": "Insurance Assistance \u2013 CA Dept of Insurance",
+        "description": "Resources for dealing with wildfire-related insurance claims.",
+        "link": "https://www.insurance.ca.gov/01-consumers/200-wrr/"
+      },
+      {
+        "title": "State Bar of California \u2013 Legal Help After a Disaster",
+        "description": "Statewide legal assistance hotline for disaster victims.",
+        "link": "https://www.calbar.ca.gov/Public/Free-Legal-Information/Legal-Help-After-a-Disaster"
+      },
+      {
+        "title": "Disaster Legal Services California",
+        "description": "Free legal help for survivors of California disasters.",
+        "link": "https://disasterlegalservicesca.org/"
+      }
+    ]
+  },
+  "Emergency Preparedness": {
+    "description": "Planning ahead can save lives. These tools help you prepare for future wildfires and stay informed during emergencies.",
+    "items": [
+      {
+        "title": "Ready for Wildfire (CAL FIRE)",
+        "description": "Tips and tools to prepare for wildfires, including evacuation plans and defensible space.",
+        "link": "https://www.readyforwildfire.org/"
+      },
+      {
+        "title": "Listos California \u2013 Resource Hub",
+        "description": "Free materials in many languages to promote disaster preparedness.",
+        "link": "https://www.listoscalifornia.org/resources/"
+      }
+    ]
+  },
+  "Community & Volunteer Opportunities": {
+    "description": "Get involved or find help in your local area. These organizations support communities during and after wildfires.",
+    "items": [
+      {
+        "title": "California Volunteers \u2013 Wildfire Recovery",
+        "description": "Opportunities to volunteer and support communities impacted by wildfires.",
+        "link": "https://www.californiavolunteers.ca.gov/wildfire-recovery/"
+      },
+      {
+        "title": "California Fire Foundation \u2013 Disaster Relief",
+        "description": "Supports survivors, firefighters, and communities affected by natural disasters.",
+        "link": "https://www.cafirefoundation.org/what-we-do/for-communities/disaster-relief"
+      }
+    ]
+  },
+  "Animal & Pet Services": {
+    "description": "Find lost pets, get shelter or supplies, and access veterinary care for animals affected by the fire.",
+    "items": [
+      {
+        "title": "LA Animal Services \u2013 Emergency Evacuation Hotline",
+        "description": "Support for locating or sheltering pets affected by wildfires.",
+        "link": "https://www.laanimalservices.com/"
+      },
+      {
+        "title": "Petco Love Lost",
+        "description": "Facial recognition-powered platform to help reunite lost pets with their owners.",
+        "link": "https://lost.petcolove.org/"
+      }
+    ]
+  },
+  "Utility Relief & Restoration": {
+    "description": "Support from local utility companies and agencies to help restore and afford essential services after a fire.",
+    "items": [
+      {
+        "title": "LADWP \u2013 Emergency Assistance",
+        "description": "Los Angeles Department of Water & Power wildfire relief support.",
+        "link": "https://www.ladwp.com/"
+      },
+      {
+        "title": "Southern California Edison \u2013 Disaster Relief Program",
+        "description": "Bill relief, late fee waivers, and reconnection assistance for wildfire-affected customers.",
+        "link": "https://www.sce.com/wildfire"
+      },
+      {
+        "title": "California Public Utilities Commission \u2013 Wildfire Protections",
+        "description": "Consumer protections during wildfire emergencies including shutoff suspensions and fee waivers.",
+        "link": "https://www.cpuc.ca.gov/wildfires"
+      }
+    ]
+  },
+  "Food & Basic Needs": {
+    "description": "Organizations providing food, hygiene kits, and daily necessities to fire-impacted residents.",
+    "items": [
+      {
+        "title": "Los Angeles Regional Food Bank",
+        "description": "Emergency food distribution for individuals and families affected by wildfires.",
+        "link": "https://www.lafoodbank.org/"
+      },
+      {
+        "title": "211 LA County \u2013 Food & Shelter",
+        "description": "Find open food pantries, meal programs, and temporary housing.",
+        "link": "https://www.211la.org/"
+      }
+    ]
+  },
+  "Cleanup & Environmental Safety": {
+    "description": "Protect yourself and your property during recovery. This section covers debris removal programs, air and water quality, and safety guidance.",
+    "items": [
+      {
+        "title": "LA County Public Works Debris Removal Program",
+        "description": "Free two-phase cleanup of hazardous waste and fire debris for eligible homeowners.",
+        "link": "https://pw.lacounty.gov/epd/fire/"
+      },
+      {
+        "title": "California Wildfire Cleanup Program",
+        "description": "Statewide wildfire debris removal information and sign-up portal.",
+        "link": "https://wildfirerecovery.caloes.ca.gov/debris-removal/"
+      },
+      {
+        "title": "Post-Fire Debris Flow Information \u2013 LA County",
+        "description": "Post-wildfire mudslide, erosion, and debris flow safety guidance.",
+        "link": "https://pw.lacounty.gov/landing/postfirehazards/"
+      },
+      {
+        "title": "AirNow \u2013 Wildfire Smoke Tracker",
+        "description": "Real-time air quality map and smoke advisories.",
+        "link": "https://www.airnow.gov/"
+      }
+    ]
+  }
+}

@@ -28,13 +28,22 @@ function getScrollableParent(element) {
   }
   return null;
 }
-function App({ slug,allData,showModal}) {
+function App({ pageData,showModal,allData}) {
+  const {slug,type }= pageData
   const [open, setOpen] = useState(true);
   const theme = useTheme();
   const router = useRouter();
+  const highlightedApn  = type==="apn" ? slug : null;
   let [showFireMap, setShowFireMap] = useState(true);
-  const openLocation = (slug: string) => {
+  const openLocation = (slug,type) => {
+    console.log("test3",{type,slug})
+    if(type === "apn") {
+      router.push(`/map?apn=${slug}`, undefined, { shallow: true });
+    }
+    else {
+    // else type is a manually submitted location post
     router.push(`/map?location=${slug}`, undefined, { shallow: true });
+    }
     setOpen(true);
     setTimeout(() => {
       const element = document.getElementsByClassName("swiper")[0];
@@ -46,13 +55,14 @@ function App({ slug,allData,showModal}) {
           top: 0,
           left: 0,
         });
-
+        
       }
     }, 200);
   };
-if (!allData) {
+  pageData.openLocation = openLocation; //!bad practice to pass functions like this
+  if (!allData) {
     allData = getData();
-}
+  }
   let [selectedLocation, setSelectedLocation] = useState(null);
   const [selectedMarker, setSelectedMarker] = useState(null);
   let [filterBy, setFilterBy] = useState("all");
@@ -83,7 +93,7 @@ if (!allData) {
   }, [hashLocation]);
   
   
-
+  
   useEffect(() => {
     
     if (selectedLocation !== null) {
@@ -95,26 +105,26 @@ if (!allData) {
   , [selectedLocation]);
   return (
     <Container 
-     {...{
-   open, setOpen,
+    {...{
+      open, setOpen,
       
       showFireMap,
       setShowFireMap,
       selectedLocation,
-       Map: showFireMap ?
-       <SplitMap {...{open, setOpen,openLocation,itemData, setSelectedLocation,selectedMarker, setSelectedMarker }} />
-       :<Map1 {...{openLocation,itemData, setSelectedLocation,selectedMarker, setSelectedMarker }} />,
+      Map: showFireMap ?
+      <SplitMap {...{highlightedApn,open, setOpen,openLocation,itemData, setSelectedLocation,selectedMarker, setSelectedMarker }} />
+      :<Map1 {...{openLocation,itemData, setSelectedLocation,selectedMarker, setSelectedMarker }} />,
       List: showModal?
       <LocationModal
-      slug={slug}
+      pageData = {pageData}
       onClose={() => {
         router.push('/map', undefined, { shallow: true }); // Remove query param
       }}
-    />
+      />
       :<List {...{openLocation,allData,itemData, selectedLocation,setSelectedLocation ,setSelectedMarker,selectedMarker,filterBy, setFilterBy}} />,
       Details: <Details {...{ selectedLocation,setSelectedLocation ,itemData }} />,
- 
-     }}
+      
+    }}
     > 
     </Container>
   );
