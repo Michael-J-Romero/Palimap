@@ -7,8 +7,8 @@ export default function GuidelinesPage() {
         <Typography variant="h4" fontWeight={700}>Community Posting Guidelines</Typography>
 
         <Typography variant="body1">
-          Our community board is a place for sharing helpful information, requesting support, offering assistance, and
-          celebrating recovery. Please follow these guidelines to keep the board respectful, useful, and safe for everyone.
+          Our discussion board is a place for sharing helpful information, requesting support, offering assistance, and
+          celebrating recovery. Please follow these guidelines to keep the discussion respectful, useful, and safe for everyone.
         </Typography>
 
         <Stack spacing={2}>

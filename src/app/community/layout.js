@@ -45,7 +45,7 @@ export default function CommunityPage({ children }) {
                         width: 'max-content',
                     }}
                 >
-                    <StyledTab label="Community Board" component={Link} href="/community/board" />
+                    <StyledTab label="Discussion Board" component={Link} href="/community/board" />
                     <StyledTab label="Calendar" component={Link} href="/community/events" />
                     <StyledTab label="Directory" component={Link} href="/community/directory" />
                 </Tabs>

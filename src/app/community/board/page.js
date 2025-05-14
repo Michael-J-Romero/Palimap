@@ -111,7 +111,7 @@ export default function CommunityBoardPage() {
     <Box py={3} px={{ xs: 2, md: 3 }} sx={{ backgroundColor: 'background.default' }}>
       <Stack spacing={2} mb={3}>
         <Typography variant="h4" fontWeight={100} fontFamily="system-ui" color="text.primary">
-          Community Board</Typography>
+          Discussion Board</Typography>
         <Stack spacing={4} mb={3} flexDirection={{ xs: 'column', sm: 'row' }} alignItems="center">
           <NewPostButton
             ButtonComponent={PostBtn}

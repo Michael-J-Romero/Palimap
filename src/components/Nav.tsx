@@ -45,8 +45,9 @@ const StyledTab = muiStyled(Tab)(({ theme }) => ({
   marginRight: '2px',
   color: theme.palette.text.secondary,
   '&.Mui-selected': {
-    color: theme.palette.primary.main,
-    backgroundColor: theme.palette.action.selected,
+    color: theme.palette.primary.light,
+    backgroundColor: '#ffffff08',
+    // backgroundColor: theme.palette.action.selected,
   },
   '&:hover': {
     backgroundColor: theme.palette.action.hover,
@@ -101,6 +102,7 @@ const Nav = () => {
             {navLinks.map(({ label, href }) => (
               <MenuItem
                 key={href}
+                color="inherit"
                 selected={pathname === href}
                 onClick={() => {
                   setMenuAnchor(null);
@@ -158,7 +160,7 @@ const Nav = () => {
           ) : (
             <Button
               variant="outlined"
-              color="primary"
+              color="inherit"
               onClick={() => setLoginOpen(true)}
               sx={{
                 borderRadius: '999px',

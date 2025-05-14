@@ -27,7 +27,7 @@ export default function PostPage({ params }) {
           router.push('/community/board')
         }
 }>
-          Back to Community Board
+          Back to Discussion Board
         </Button>
 
         <Typography variant="h4" fontWeight={700}>{post.title}</Typography>

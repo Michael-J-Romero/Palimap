@@ -66,7 +66,7 @@ const ButtonComponentUsed = ButtonComponent || ButtonComponentDefault;
             <CloseIcon />
           </IconButton>
         </DialogTitle>
-        <DialogContent dividers>
+        {/* <DialogContent dividers>
             <div>
                (Post UI under construction)
             </div>
@@ -163,10 +163,45 @@ const ButtonComponentUsed = ButtonComponent || ButtonComponentDefault;
               </MenuItem>
             ))}
           </TextField>
-        </DialogContent>
+        </DialogContent> */}
+
+
+        <DialogContent dividers>
+          {/* SIGN IN TO POST */}
+          <Box
+            sx={{
+              display: "flex",
+              flexDirection: "column",
+              alignItems: "center",
+              justifyContent: "center",
+              height: 200,
+            }}
+          >
+            <Typography variant="h6" gutterBottom>
+              Sign in to post
+            </Typography>
+            <Typography variant="body2" color="text.secondary">
+              You need to be signed in to post. Please sign in to your account.
+            </Typography>
+            <Button
+              variant="contained"
+              color="primary"
+              sx={{ mt: 2 }}
+              onClick={() => {
+                // Handle sign-in logic here
+                console.log("Sign in clicked");
+                alert("not functional yet")
+              }}
+            >
+              Sign In
+            </Button>
+          </Box>
+          </DialogContent>
+
+
         <DialogActions>
-          <Button onClick={() => setOpen(false)}>Cancel</Button>
-          <Button onClick={() => { console.log(form); setOpen(false); }} variant="contained">
+          <Button disabled onClick={() => setOpen(false)}>Cancel</Button>
+          <Button disabled onClick={() => { console.log(form); setOpen(false); }} variant="contained">
             Post
           </Button>
         </DialogActions>

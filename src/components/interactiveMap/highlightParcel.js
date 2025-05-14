@@ -38,7 +38,7 @@ export async function highlightParcelWithFireData(map, { apn, latlng,moveTo }) {
 
   const geoJsonLayer = L.geoJSON(parcel, {
     style: {
-      color: damageInfo.color,
+      color: damageInfo.color=='white'?"black":damageInfo.color,
       fillColor: damageInfo.color,
       weight: 2,
       fillOpacity: 0.3,
@@ -137,7 +137,7 @@ async function getFireDamageFromArcgis(parcelFeature) {
     console.warn("Failed to fetch fire data from ArcGIS:", err);
     return {
       level: 0,
-      color: DAMAGE_COLORS[0]
+      color: 'white'
     };
   }
 }
