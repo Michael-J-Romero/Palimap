@@ -481,7 +481,11 @@ const CommunityCalendar = () => {
                 //   onDrillDown={() => null}
                 />
             </Box>
-
+<Divider
+                    sx={{ mb: 3 }}
+                    variant="middle"
+                    light/>
+                    
             <Typography variant="h6" gutterBottom textAlign="center">
                 Upcoming Events
             </Typography>

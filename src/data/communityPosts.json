@@ -263,11 +263,11 @@
     "eventDate": "null"
   },
   {
-    "id": 20,
+    "id": 200,
     "title": "Extra construction materials available",
     "category": "Donations",
     "author": "Nate Fleming",
-    "date": "2024-05-11",
+    "date": "2024-05-6",
     "comments": 1,
     "type": "discussion",
     "excerpt": "I have some items available: extra construction materials available. If anyone is in need, you're welcome to them\u2014",
@@ -298,7 +298,9 @@
     "type": "discussion",
     "excerpt": "Please be aware: coyote sightings near school path. This could impact folks in the area, so take caution\u2014",
     "location": "null",
-    "eventDate": "null"
+    "eventDate": "null",
+        "imageUrl" : "/placeholder.png"
+
   },
   {
     "id": 23,

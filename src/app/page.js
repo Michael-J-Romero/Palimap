@@ -187,7 +187,7 @@ const HomepageBody = () => {
       />
 
       {/* How it works */}
-<Container maxWidth="md">
+<Container maxWidth="lg">
       <Grid container spacing={4} mb={6}>
         {[
           {
@@ -236,7 +236,8 @@ const HomepageBody = () => {
         ))}
       </Grid>
 
-
+</Container>
+<Container maxWidth="md">
 
 
       {/* Live Stats Placeholder */}
