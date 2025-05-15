@@ -88,8 +88,19 @@ const Nav = () => {
 
   return (
     <>
-      {isMobile ? (
+      {(isMobile) ? (
         <>
+                  <StyledTabs value={
+              pathname.startsWith('/community') ? '/community' :
+              pathname
+              } 
+          onChange={handleTabChange}>
+            {navLinks.slice(0, 2)
+            .map(({ label, href }) => (
+              <StyledTab key={href} value={href} label={label} />
+            ))}
+          </StyledTabs>
+
           <IconButton onClick={(e) => setMenuAnchor(e.currentTarget)} color="inherit">
             <MenuIcon />
           </IconButton>
@@ -99,7 +110,8 @@ const Nav = () => {
             onClose={() => setMenuAnchor(null)}
             TransitionComponent={Fade}
           >
-            {navLinks.map(({ label, href }) => (
+            {navLinks.slice(2)
+            .map(({ label, href }) => (
               <MenuItem
                 key={href}
                 color="inherit"

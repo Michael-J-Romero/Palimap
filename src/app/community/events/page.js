@@ -335,14 +335,21 @@ const CommunityCalendar = () => {
     return (
         <Box sx={{ p: 3 }}>
             <Stack spacing={2} mb={3}>
-                    <Typography variant="h4" fontWeight={100} fontFamily="system-ui" color="text.primary">
+                    <Typography sx={{
+          textAlign: { xs: 'center', md: 'left' },
+        }}
+         variant="h4" fontWeight={100} fontFamily="system-ui" color="text.primary">
                       Community Calendar
                       </Typography>
                     <Stack spacing={4} mb={3} flexDirection={{ xs: 'column', sm: 'row' }} alignItems="center">
                       <NewPostButton
                         ButtonComponent={PostBtn}
                       />
-                      <Typography color="text.secondary" sx={{ m: '0 !important' }}>
+                      <Typography color="text.secondary" 
+                      sx={{ 
+                                  m: '0 !important' ,
+                                  mt: { xs: '12px !important', lg: '0 !important' },
+                                  }}>
                          Planning an event? Share it with the community!
                          Before posting, please take a moment to read the
                         <Typography component={Link} href="/community/guidelines" color="primary"  >
@@ -499,7 +506,7 @@ export default CommunityCalendar;
 
 const Posts = ({ activeFilter }) => {
   const [page, setPage] = useState(0);
-  const itemsPerPage = 3;
+  const itemsPerPage = 1;
 
   useEffect(() => {
     setPage(0);
@@ -616,7 +623,11 @@ const Posts = ({ activeFilter }) => {
             key={event.id}
             sx={{
               flex: "1 1 0",
-              maxWidth: "calc(33.33% - 16px)",
+              maxWidth: {
+                xs: "100%",
+                sm: "calc(50% - 16px)",
+                md: "calc(33.33% - 16px)",
+                },
               minWidth: 0,
             }}
           >

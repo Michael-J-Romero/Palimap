@@ -423,7 +423,7 @@ function SplitMapComparison(props) {
         }} 
         >
         <InfoDialog {...{showInfo, setShowInfo}}/>
-      {/* <AddPostButton/> */}
+      <AddPostButton/> 
       </Box>
       {/* layers */}
       <Box

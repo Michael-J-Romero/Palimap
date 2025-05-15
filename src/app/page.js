@@ -188,7 +188,9 @@ const HomepageBody = () => {
 
       {/* How it works */}
 <Container maxWidth="lg">
-      <Grid container spacing={4} mb={6}>
+      <Grid container spacing={4} mb={6}
+      mt={{ xs: 1, md: 0 }}
+      >
         {[
           {
             icon: <MapOutlinedIcon fontSize="large" />,

@@ -110,14 +110,20 @@ export default function CommunityBoardPage() {
   return (
     <Box py={3} px={{ xs: 2, md: 3 }} sx={{ backgroundColor: 'background.default' }}>
       <Stack spacing={2} mb={3}>
-        <Typography variant="h4" fontWeight={100} fontFamily="system-ui" color="text.primary">
+        <Typography sx={{
+          textAlign: { xs: 'center', md: 'left' },
+        }}
+        variant="h4" fontWeight={100} fontFamily="system-ui" color="text.primary">
           Discussion Board</Typography>
         <Stack spacing={4} mb={3} flexDirection={{ xs: 'column', sm: 'row' }} alignItems="center">
           <NewPostButton
             ButtonComponent={PostBtn}
           />
 
-          <Typography color="text.secondary" sx={{ m: '0 !important' }}>
+          <Typography color="text.secondary" sx={{ 
+            m: '0 !important' ,
+            mt: { xs: '12px !important', lg: '0 !important' },
+            }}>
             Share updates, stories, or requests with your neighbors. Before posting, please take a moment to read the
             <Typography component={Link} href="/community/guidelines" color="primary"  >
               {" "}community guidelines.
@@ -128,8 +134,9 @@ export default function CommunityBoardPage() {
       <Divider ref={containerRef}
         sx={{ mb: 3 }} />
       <Stack direction={{ xs: 'column', sm: 'row' }} spacing={2} mb={2} alignItems="center" justifyContent="space-between">
-        <Stack direction="row" spacing={2} alignItems="center" flexGrow={1} flexWrap="wrap">
-          <FormControl size="small" sx={{ minWidth: 180 }}>
+        <Stack direction="row" 
+        spacing={2} alignItems="center" flexGrow={1} flexWrap="wrap">
+          <FormControl size="small" sx={{ flexGrow:1,flexShrink:1,wrap:'nowrap',minWidth: 150 }}>
             <InputLabel>Category</InputLabel>
             <Select
               value={selectedCategory}
@@ -144,7 +151,7 @@ export default function CommunityBoardPage() {
               ))}
             </Select>
           </FormControl>
-          <FormControl size="small" sx={{ minWidth: 180 }}>
+          <FormControl size="small" sx={{ flexGrow:1,flexShrink:1,wrap:'nowrap',minWidth: 150 }}>
             <InputLabel>Sort By</InputLabel>
             <Select
               value={sortOrder}

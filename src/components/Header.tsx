@@ -3,7 +3,7 @@
 'use client';
 
 import React from 'react';
-import { AppBar, Toolbar, Typography, Box } from '@mui/material';
+import { AppBar, Toolbar, Typography, Box ,useMediaQuery,useTheme,} from '@mui/material';
 import styled from 'styled-components';
 import Nav from './Nav';
 import { usePathname, useRouter } from 'next/navigation';
@@ -17,6 +17,10 @@ const Logo = styled(Typography)`
 `;
 
 const Header = () => {
+    const theme = useTheme();
+  
+    const isMobile = useMediaQuery(theme.breakpoints.down('md'));
+  
   //router
   const router = useRouter();
   return(<AppBar 
@@ -75,12 +79,14 @@ const Header = () => {
           marginRight: 8,
           }}
           />
+          
       <Logo 
       //make clickable
       onClick={() => router.push('/', undefined, { shallow: true })}
 
       variant="h6" 
       sx={{ 
+        display: { xs: 'none', sm: 'block' },
         flexGrow: 0,
 cursor: 'pointer',
   '&:hover': {
@@ -91,7 +97,11 @@ cursor: 'pointer',
        color="primary">
         PaliMap
        </Logo>
-       <Typography variant="subtitle" color="text.secondary" sx={{ ml: 2 }}>
+       <Typography variant="subtitle" color="text.secondary" 
+       sx={{
+         ml: 2,
+         display: { sm: 'none', md: 'block',xs: 'none' },
+         }}>
        Rebuilding Together
       </Typography>
       </Box>

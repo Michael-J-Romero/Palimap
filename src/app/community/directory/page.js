@@ -354,7 +354,10 @@ export default function MemberDirectoryPage() {
 
   return (
     <Box p={3}> 
-      <Typography variant="h4" mb={1} fontWeight={100} fontFamily = {'system-ui'}>
+      <Typography sx={{
+          textAlign: { xs: 'center', md: 'left' },
+        }}
+         variant="h4" mb={1} fontWeight={100} fontFamily = {'system-ui'}>
       Verified Members</Typography>
       <Typography variant="body1" mb={3}>
         These are verified members of our community directory. If you'd like to be listed, please create an account.

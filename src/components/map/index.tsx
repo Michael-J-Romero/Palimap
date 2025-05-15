@@ -6,13 +6,14 @@ import React, { useState, useEffect, useRef } from "react";
 import Map1 from "./map";
 import List  from "./list";
 import dynamic from "next/dynamic";
-import {Button, Drawer, IconButton, Box } from "@mui/material";
+import {Tabs, Tab, useMediaQuery,Button, Drawer, IconButton, Box } from "@mui/material";
 import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
 import ChevronRightIcon from "@mui/icons-material/ChevronRight";
 import { useSearchParams, useRouter } from 'next/navigation';
-import LocationModal from '@/components/Location'; // Your modal
 import { useTheme } from "@mui/material/styles";
-
+import LocationModal from '@/components/Location'; // Your modal
+import SwipeableDrawer from "@mui/material/SwipeableDrawer";
+import MobileMapLayout from "./mobileMapLayout";
 const SplitMap = dynamic(() => import("../interactiveMap/index.js"), { ssr: false });
 
 let aa
@@ -29,12 +30,20 @@ function getScrollableParent(element) {
   return null;
 }
 function App({ pageData,showModal,allData}) {
-  const {slug,type }= pageData
+
+  
+  const {slug,type }= pageData || {};
   const [open, setOpen] = useState(true);
   const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down("md"));
   const router = useRouter();
   const highlightedApn  = type==="apn" ? slug : null;
   let [showFireMap, setShowFireMap] = useState(true);
+  useEffect(() => {
+    if (slug !== null) {
+      setOpen(true);
+    }
+  }  , [slug]);
   const openLocation = (slug,type) => {
     console.log("test3",{type,slug})
     if(type === "apn") {
@@ -103,9 +112,12 @@ function App({ pageData,showModal,allData}) {
     }
   }
   , [selectedLocation]);
+  const ContainerComponent = isMobile ? MobileMapLayout : Container;
   return (
-    <Container 
+    <ContainerComponent 
     {...{
+      slug,
+      forceOpen: setOpen,
       open, setOpen,
       
       showFireMap,
@@ -122,15 +134,17 @@ function App({ pageData,showModal,allData}) {
       }}
       />
       :<List {...{openLocation,allData,itemData, selectedLocation,setSelectedLocation ,setSelectedMarker,selectedMarker,filterBy, setFilterBy}} />,
-      Details: <Details {...{ selectedLocation,setSelectedLocation ,itemData }} />,
+      Details: <Details {...{ selectedLocation,setSelectedLocation ,itemData ,pageData, setSelectedMarker}} />,
       
     }}
     > 
-    </Container>
+    </ContainerComponent>
   );
 }
 
 
+
+ 
 function Container({ open, setOpen,Map, Details, Footer, List, Header, selectedLocation, showFireMap, setShowFireMap }) {
   const [mapRef, setMapRef] = useState(null); // <-- pass this into Map
 const theme = useTheme();
