@@ -16,6 +16,7 @@ export default function MobileVerticalContainer({
   open,
   setOpen,slug,
 }) {
+  const scrollRef = useRef(null);
   const theme = useTheme();
   const [mapRef, setMapRef] = useState(null);
   const [height, setHeight] = useState(DEFAULT_HEIGHT);
@@ -26,7 +27,48 @@ export default function MobileVerticalContainer({
     y: window.innerHeight - DEFAULT_HEIGHT,
   }));
 
-  const dragFn = ({ last, movement: [, my], memo = y.get() }) => {
+  const dragFn = (state) => {
+        
+    let {event, first,last, movement: [, my], memo = y.get() } = state;
+   
+    if (first && event?.target) {
+      const scrollableEl = event.target.closest(".simplebar-content-wrapper");
+      if (scrollableEl) {
+        const atTop = scrollableEl.scrollTop <= 0;
+        const atBottom =
+          scrollableEl.scrollTop + scrollableEl.clientHeight >= scrollableEl.scrollHeight;
+
+        const pullingDown = my > 0;
+        const pullingUp = my < 0;
+
+        const allowDrag =
+          (pullingDown && atTop) || (pullingUp && atBottom);
+
+        if (!allowDrag) {
+          state.cancel(); // cancel drag, allow scroll
+          return;
+        }
+      }
+    }
+    
+    
+    
+     
+       // Check scroll edge on first drag
+    if (first && scrollRef.current) {
+      const el = scrollRef.current;
+      const atTop = el.scrollTop <= 0;
+      const atBottom = el.scrollTop + el.clientHeight >= el.scrollHeight;
+
+      // Prevent drag unless at top and pulling down, or at bottom and pulling up
+      if ((my < 0 && !atBottom) || (my > 0 && !atTop)) {
+        state.cancel(); // cancel the drag gesture
+        return;
+      }
+    }
+
+
+
     const newY = memo + my;
 
     // Clamp within bounds
@@ -147,6 +189,8 @@ export default function MobileVerticalContainer({
         {/* Drag Handle */}
         <Box
           sx={{
+            flexShrink: 0,
+
             height: 25,
             display: "flex",
             justifyContent: "center",
@@ -158,11 +202,12 @@ export default function MobileVerticalContainer({
             borderTopRightRadius: 12,
           }}
         >
-          <Box sx={{ width: 60, height: 4, borderRadius: 2, background: theme.palette.primary.main }} />
+          <Box sx={{ width: 60, height: 4, borderRadius: 2, background: theme.palette.text.secondary }} />
         </Box>
 
         {/* Content */}
-        <Box sx={{ flexGrow: 1, overflowY: "auto"}}>
+        <Box ref={scrollRef} 
+         sx={{ flexGrow: 1, overflowY: "auto"}}>
           {List}
         {Footer && <Box>{Footer}</Box>}
         </Box>
