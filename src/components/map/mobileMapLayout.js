@@ -142,7 +142,8 @@ export default function MobileVerticalContainer({
   }, [height, mapRef]);
 
   return (
-    <Box sx={{ width: "100vw", height: "100vh", position: "relative", overflow: "hidden" }}>
+    <Box className="mobileMapLayout"
+    sx={{ width: "100vw", height: "100vh", position: "relative", overflow: "hidden" }}>
       {/* Map Section */}
       <Box sx={{ position: "absolute", inset: 0, zIndex: 1 }}>
         {React.cloneElement(Map, { setMapRef })}

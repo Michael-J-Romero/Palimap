@@ -1,3 +1,9 @@
+html, body ,#root, .mobileMapLayout {
+  overscroll-behavior-y: none;
+  touch-action: pan-x; /* optional: disables vertical scrolling by touch */
+}
+
+
 :root {
   --background: #ffffff;
   --foreground: #171717;
