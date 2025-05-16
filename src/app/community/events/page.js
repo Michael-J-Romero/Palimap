@@ -3,7 +3,6 @@
 import { useMemo, useState, useCallback, useEffect } from 'react';
 import {
   IconButton,
-  useMediaQuery,
     Box,
     Button,
     Typography,
@@ -11,10 +10,12 @@ import {
     CardContent,
     Chip,
     Stack,
-    useTheme, Menu,
+     Menu,
     MenuItem,
     Divider,
-    Link
+    Link,
+      useMediaQuery,
+  useTheme,
 } from '@mui/material';
 import AddIcon from '@mui/icons-material/Add';
 import FilterListIcon from '@mui/icons-material/FilterList';
@@ -505,8 +506,10 @@ export default CommunityCalendar;
 
 
 const Posts = ({ activeFilter }) => {
+    const theme = useTheme();
+    const isMobileLayout = useMediaQuery(theme.breakpoints.down("sm"));
   const [page, setPage] = useState(0);
-  const itemsPerPage = 1;
+  const itemsPerPage = isMobileLayout ? 1 : 3;
 
   useEffect(() => {
     setPage(0);
