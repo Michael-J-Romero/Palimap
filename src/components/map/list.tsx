@@ -28,6 +28,7 @@ function List({
   selectedMarker,
   filterBy,
   setFilterBy,
+  isMobile,
 }) {
   const [sortBy, setSortBy] = useState("date");
   let data=allData
@@ -55,6 +56,7 @@ function List({
 console.log("theme",theme)
   return (
     <Box
+
     boxShadow={4}
       sx={{
         zIndex: settings.zIndex.mapList,
@@ -139,6 +141,7 @@ console.log("theme",theme)
           ))}
         </Select>
 
+{!isMobile &&
         <Select
           value={sortBy}
           onChange={(event) => setSortBy(event.target.value)}
@@ -151,6 +154,7 @@ console.log("theme",theme)
           <MenuItem value="title">By Title</MenuItem>
           <MenuItem value="type">By Type</MenuItem>
         </Select>
+        }
         <NewPostButton />
 
       </Box>

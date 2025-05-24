@@ -32,9 +32,9 @@
     margin-top: 2px;
   }
   
-  .leaflet-pane.leaflet-tile-pane {
+  /* .leaflet-pane.leaflet-tile-pane {
     clip-path: url(#clip-boundary);
-  }
+  } */
   /* .leaflet-pane.leaflet-tile-pane {
     mask-image: url(#svg-boundary-mask);
     mask-repeat: no-repeat;

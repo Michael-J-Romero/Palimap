@@ -2,8 +2,6 @@
 let settings = {
   recentActivityRows: 1
 }
-import React, { useState, useEffect } from "react";
-import { useRouter } from 'next/navigation';
 import {
   Box,
   Typography,
@@ -12,395 +10,303 @@ import {
   Grid,
   Card,
   CardContent,
-  CardMedia,
+  CardMedia, 
   Divider, useMediaQuery, Stack 
 } from "@mui/material";
-//import donate icon (money)
-import AttachMoneyIcon from '@mui/icons-material/AttachMoney';
-import MapOutlinedIcon from '@mui/icons-material/MapOutlined';
-import EditLocationAltIcon from '@mui/icons-material/EditLocationAlt';
-import WifiTetheringIcon from '@mui/icons-material/WifiTethering';
 import Footer from "@/components/Footer";
 import { useTheme } from "@mui/material/styles";
-import MapIcon from "@mui/icons-material/Map";
-import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
-// import TrendingUpIcon from "@mui/icons-material/TrendingUp";
-import { types, imageArray } from "@/data/builtIn"
-// import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
-import TrendingUpIcon from "@mui/icons-material/TrendingUp";
 import HeroSlideshow from "@/components/HeroSlideshow";
+      import { motion } from "framer-motion";
+const pySection = 16
+const darkBg = '#282936'
+const homepageContent = {
+  sections: [
+    {
+      title: "ABOUT THE FOUNDATION",
+      align: "left",
+      img: "/home1.jpg",
+      text: `The Su Xiaobai Foundation was founded in 2024. Sponsored by the artist Su Xiaobai, the Foundation is dedicated to supporting research and greater public interest in the ideas and practice of new generations of international artists. 
 
  
+
+In particular, the Foundation seeks to support artists who share Su Xiaobai’s commitment to reviving traditional materials and techniques in the production of contemporary art. 
+
  
- function HeroSection() {
-  const theme = useTheme();
-  const isSm = useMediaQuery(theme.breakpoints.down('sm'));
-  const isMd = useMediaQuery(theme.breakpoints.down('md'));
 
-  const updateButton = (isSm )
-  ?  <Button 
-  fullWidth
-  variant="contained" size="large" startIcon={<AddCircleOutlineIcon />} sx={{ mt: 2 }}>
-    Post an Update
-  </Button>
-  :(
-    <Button
-      variant="outlined"
-      size="large"
-      startIcon={<AddCircleOutlineIcon />}
-      sx={{
-        color: 'white',
-        borderColor: 'white',
-        '&:hover': {
-          backgroundColor: 'rgba(255, 255, 255, 0.08)',
-          borderColor: 'white',
-        },
-        '& .MuiSvgIcon-root': {
-          fill: 'white',
-        },
-      }}
-    >
-      Post an Update
-    </Button>
-  );
-  const router = useRouter();
-  const mapButton = (
-    <Button fullWidth={isSm}
-    onClick={() => router.push('/map', undefined, { shallow: true })}
-    variant="contained" size="large" startIcon={<MapIcon />}>
-      View the Map
-    </Button>
-  );
+The Foundation is building a collection of Su Xiaobai's work. The majority of the collection is donated by the artist himself, and donations from individual collectors and institutions are welcomed. `
+    
+    },
+    {
+      title: "ABOUT THE ARTIST",
+      align: "right",
+      img: "/home2.jpg",
+      text: `Su Xiaobai is one of the most significant contemporary Chinese artists working today. His practice bridges traditional Chinese lacquer techniques and modern abstract aesthetics, focusing on surface, texture, and material.`,
+    },
+    {
+      title: "HOW IT WORKS",
+      align: "center",
+    },
+  ],
+};
 
-  const subtitle = (
-    <Typography
-      variant={isSm ? 'body2' : isMd ? 'body1' : 'h6'}
-      color="white"
-      maxWidth="md"
-      mx="auto"
-      bgcolor="#00000030"
-      borderRadius={2}
-      px={2}
-      py={1}
-      fontWeight="light"
-    >
-      {isSm
-        ? 'Your hub for fire recovery — see updates and support.'
-        : `Your interactive hub for fire recovery 
-        — see updates, share progress, and support your community.`}
-    </Typography>
-  );
-
-  const title =  (
-    <Typography
-      variant={isMd ? 'h4' : 'h3'}
-      fontWeight="bold"
-      gutterBottom
-      color="white"
-    >
-      Rebuilding Together
-    </Typography>
-  );
-
-  const innerContent = (
-    <Box sx={{ position: 'relative', zIndex: 2, p: isSm ? 2 : 4 }}>
-      {title}
-      {subtitle}
-      {!isSm && !isMd && (
-        <Box mt={4} display="flex" justifyContent="center" gap={2}>
-          {mapButton}
-          {updateButton}
-        </Box>
-      )}
-    </Box>
-  );
-
-  return (
-    <>
-      <Box
-        textAlign="center"
-        mb={isSm ? 2 : 6}
-        sx={{
-          // height: isSm ? 200 : 300,
-          maxHeight: '50vh',
-          position: 'relative',
-          // borderRadius: 2,
-          overflow: 'hidden',
-          boxShadow: 2,
-        }}
-      >
-        {/* Background Slideshow */}
-        <Box
-          sx={{
-            position: 'absolute',
-            inset: 0,
-            zIndex: 1,
-          }}
-        >
-          <HeroSlideshow />
-        </Box>
-
-        {/* Overlay Content */}
-        {innerContent}
-      </Box>
-
-      {/* Buttons below hero on small screens */}
-      {(isSm || isMd) && (
-        <Stack spacing={2} 
-        direction={isSm ? 'column' : 'row'}
-        justifyContent="center"
-         alignItems="center">
-          {mapButton}
-          {updateButton}
-        </Stack>
-      )}
-    </>
-  );
+const motionProps = {
+  initial: { opacity: 0, y: 20 },
+  whileInView: { opacity: 1, y: 0 },
+  transition: { duration: 0.4, ease: "easeOut" },
+  viewport: { once: true , amount: 0.2 },
+  exit: { opacity: 0, y: 20 },
 }
-
-
-const imgs = [
-  './heroImages/1.webp ',
-  './heroImages/2.webp ',
-  './heroImages/3.jfif ',
-  './heroImages/4.png ',
-  './heroImages/5.png ',
-  './heroImages/6.jpg ',
-  './heroImages/7.png ',
-  'https://oregonbusiness.com/wp-content/uploads/2024/10/Lomakatsi-Restoration-Project-2996x1786-1.jpg',
-]
 const HomepageBody = () => {
   const theme = useTheme();
   return (
-    <div maxWidth="lg" style={{
-      height: "100%",
-      overflow: "auto",
-      // pt: { xs: 2, md: 4 },
-      // pb: { xs: 2, md: 4 },
-
-    }}>
+    <Box>
+      
+      <motion.div   {...motionProps}  >
+        {/* Your content */}
       {/* Hero Section */}
-      <HeroSection
-        {...{
-          theme,
-        }}
-      />
+      <HeroSlideshow img="/hero3.PNG" height="95vh" />
 
-      {/* How it works */}
-<Container maxWidth="lg">
-      <Grid container spacing={4} mb={6}
-      mt={{ xs: 1, md: 0 }}
-      >
-        {[
-          {
-            icon: <MapOutlinedIcon fontSize="large" />,
-            title: 'Explore the Map',
-            desc: 'Track real-time updates from your community — from rebuilding to reopening.',
-          },
-          {
-            icon: <EditLocationAltIcon fontSize="large" />,
-            title: 'Share Local Updates',
-            desc: 'Post recovery efforts, events, or important info with a simple form.',
-          },
-          {
-            icon: <WifiTetheringIcon fontSize="large" />,
-            title: 'Stay Connected',
-            desc: 'Follow nearby activity and get involved where it matters most.',
-          },
-        ].map((step, i) => (
-          <Grid item xs={12} md={4} key={i}>
-            <Card elevation={1} sx={{ height: '100%', display: 'flex', flexDirection: 'column', alignItems: 'center', textAlign: 'center', p: 3 }}>
-              <Box
-                sx={{
-                  mb: 2,
-                  // bgcolor: (theme) => theme.palette.primary.light,
-                  // borderRadius: '50%',
-                  // width: 64,
-                  // height: 64,
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                }}
-              >
-                {step.icon}
-                <Typography variant="h6" fontWeight={600} gutterLeft
-                  sx={{ ml: .5, }}>
-                  {step.title}
-                </Typography>
-              </Box>
-              <Box display="flex" alignItems="center" justifyContent="center" mb={2}>
-                <Typography variant="body2" color="text.secondary">
-                  {step.desc}
-                </Typography>
-              </Box>
-            </Card>
-          </Grid>
-        ))}
-      </Grid>
+      </motion.div>
+      {/* Content Sections */}
+      <motion.div   {...motionProps}  >
+      <Container maxWidth="md" sx={{ py: pySection,pt: pySection/2}}>
+ 
+        <Section section={homepageContent.sections[0]} />
+      </Container>
+      </motion.div>
 
-</Container>
-<Container maxWidth="md">
+      <FullWidthSection img='/img3d.png'/>
 
 
-      {/* Live Stats Placeholder */}
-        <Divider />
-      <Box mb={2} my={2} display="flex" flexDirection="row" alignItems="center" justifyContent="flex-start">
-        <Typography variant="h5" fontWeight="bold" gutterBottom>
-          This Week’s Highlights
-        </Typography>
-        <Typography variant="body2" color="text.secondary" ml={2}>
-          14 new posts • 3 new business reopenings • 1 safety alert
-        </Typography>
-      </Box>
+      <motion.div   {...motionProps}  >
+      <Container maxWidth="md" sx={{ py: pySection,px:0 }}>
+      
+        {/* <Section section={homepageContent.sections[1]} /> */}
+        <SectionDiv title="SELECTED WORKS"  
+        align="left"/>
+        <img src="/art.png" alt="Full Width Section" style={{
+          width: '100%',
+          padding: '32px 0px',
+          transform: 'scale(1.2)',
+          transformOrigin: 'top center',
+          // margin: 'auto',
+          // paddingLeft: '0px',
+          // paddingBottom: '0px',
+          // marginLeft: '-16px',
+          height: 'auto',
+          /* Add any additional styles here */
+        }} />
+      </Container>
 
-      {/* Recent Activity Feed (placeholder) */}
-      <Grid container spacing={4} mb={4}>
-        {imageArray.slice( 7,10 * settings.recentActivityRows).map((img, i) => (
-          <Grid item xs={12} md={4} key={i}>
-            <Card>
-              <CardMedia
-                image={img}
-                component="div"
-                sx={{ height: 160, backgroundColor: theme.palette.grey[300] }}
-              >
-                {/* Placeholder image */}
-              </CardMedia>
-              <CardContent>
-                <Typography variant="subtitle1" fontWeight={600}>
-                  Sample Post Title #{i + 1}
-                </Typography>
-                <Typography variant="caption" color="text.secondary">
-                  Fire Recovery • 2 days ago
-                </Typography>
-                <Typography
-                  variant="body2"
-                  color="text.secondary"
-                  sx={{ mt: 1, overflow: "hidden", display: "-webkit-box", WebkitLineClamp: 2, WebkitBoxOrient: "vertical" }}
-                >
-                  Placeholder description text for the post. This should summarize what’s happening and why it matters.
-                </Typography>
-              </CardContent>
-            </Card>
-          </Grid>
-        ))}
-      </Grid>
-        <Divider />
-{/* <br/> */}
+      </motion.div>
+      {/* <Footer /> */}
 
-      {/* show categories as chips */}
-      <Box my={4} textAlign="left">
-        <Stack mt={0} direction="row"  flexWrap="wrap">
-        <Typography variant="h5" fontWeight="bold" gutterBottom mr={2}>
-          Find Posts by Category: 
-          
-        </Typography>
-
-          {types.map((type, i) => (
-            <Box key={i} display="inline-block" mr={1} mb={1}>
-              <Button variant="outlined" size="small" startIcon={type.icon} sx={{ borderRadius: 20 }}>
-                {type.type}  ({type.count})
-              </Button>
-            </Box>
-          ))}
-        </Stack>
-
-      </Box>
-
-        <Divider />
-
-      {/* Closing Call to Action */}
-      <Box textAlign="center" mt={3}  >
-        <Typography variant="h6" gutterBottom>
-          This map is powered by the community and needs your help!
-        </Typography>
-        <Button variant="contained" size="large" startIcon={<TrendingUpIcon />}
-          sx={{ mt: 2 }}>
-          Contribute an Update
-        </Button>
-        {/* donate */}
-        <Button variant="outlined" size="large" startIcon={<AttachMoneyIcon />} color="success"
-          sx={{ mt: 2, ml: 2 }}>
-          Donate
-        </Button>
-      </Box>
-    </Container>
-      <Footer />
-    </div>
+    </Box>
   );
 };
-function HeroSectione({
-  theme
-}) {
-  let updateButton = (!isSm )
-  ?  <Button variant="contained" size="large" startIcon={<AddCircleOutlineIcon />} sx={{ mt: 2 }}>
-    Post an Update
-  </Button>
-  :<Button
-    variant="outlined"
-    size="large"
-    startIcon={<AddCircleOutlineIcon />}
-    sx={{
-      color: 'white',
-      borderColor: 'white',
-      '&:hover': {
-        backgroundColor: 'rgba(255, 255, 255, 0.08)',
-        borderColor: 'white',
-      },
-      '& .MuiSvgIcon-root': {
-        fill: 'white',
-      },
-    }}
-  >
-    Post an Update
-  </Button>
-  let mapButton = <Button variant="contained" size="large" startIcon={<MapIcon />}>
-    View the Map
-  </Button>
-  let subtitle = <Typography variant="h6" color="white" maxWidth="md" mx="auto" bgcolor="#00000030" borderRadius={10} p={.05}
-    fontWeight="light"
-  >
-    Your interactive hub for fire recovery — see updates, share progress,
-    and support your community.
-  </Typography>
-  let title = <Typography variant="h3" fontWeight="bold" gutterBottom color="white">
-    Rebuilding Together
-  </Typography>
+
+function FullWidthSection({img}) {
+  return <Box sx={{
+    display: 'flex',
+    flexDirection: 'column',
+    justifyContent: 'center',
+    alignItems: 'center',
+    width: '100%',
+    height: 'auto',
+    backgroundColor: darkBg,
+    py: pySection,
+    px: 4,
+    position: 'relative',
+  }}> 
+  
+  {/* <Box sx={{
+    position: 'absolute',
+    top: '50px',
+    left: '0',
+    // width: '100%',
+    width: '51%',
+    color: '#fff',
+    p: 10,
+    color: '#fff',
+  }}>
+    <SectionDiv title="THE ARTIST" align="center" dark/>
+  </Box> */}
+            <motion.div   {...motionProps}  >
 
 
+      <img src={img} alt="Full Width Section" style={{
+        maxWidth: '1000px',
+        width: '100%',
+        height: 'auto',
+        /* Add any additional styles here */
+      }} />
+      </motion.div>
+      </Box>
+}
+
+const fadeInUp = {
+  hidden: { opacity: 0, y: 20 },
+  visible: (customDelay = 0) => ({
+    opacity: 1,
+    y: 0,
+    transition: {
+      duration: 0.5,
+      ease: "easeOut",
+      delay: customDelay,
+    },
+  }),
+};
+
+ function Section({ section }) {
   return (
-    <Box textAlign="center" mb={6}
-      borderRadius={1}
-      shadow={2}
+    <motion.div
+      variants={fadeInUp}
+      initial="hidden"
+      whileInView="visible"
+      viewport={{ once: true, amount: 0.4 }}
+    >
+      <Box sx={{}}>
+        <motion.div
+  initial={{ x: -100, opacity: 0 }}
+  whileInView={{ x: 0, opacity: 1 }}
+  transition={{ duration: 0.4, ease: "easeOut" }}
+  viewport={{ once: true, amount: 0.4 }}
+  
+>
+        <SectionDiv title={section.title} align={section.align} />
+       </motion.div>
+        {section.img && (
+          <Media
+            img={section.img}
+            text={section.text}
+            reverse={section.align === "right"}
+          />
+        )}
+      </Box>
+    </motion.div>
+  );
+}
+
+  function Media({ img, text, reverse }) {
+  return (
+    <Box
       sx={{
-        overflow: "hidden",
-        boxShadow: 2,
-        padding: 4,
-        color: theme.palette.text.primary,
-        borderRadius: 1,
-        position: "relative",
+        display: "flex",
+        flexDirection: { xs: "column", md: reverse ? "row-reverse" : "row" },
+        gap: 4,
+        py: 2,
+        // mb: 12,
+            // boxShadow: 2,
+
+        mt: 2,
       }}
     >
-      <Box
-        sx={{
-          position: "absolute",
-          top: 0,
-          left: 0,
-          width: "100%",
-          height: "100%",
-          zIndex: 1,
-        }}>
-        <HeroSlideshow />
-      </Box>
-      <Box
-        sx={{ position: "relative", zIndex: 2 }}>
-        {title}
-        {subtitle}
-        <Box mt={4} display="flex" justifyContent="center" gap={2}>
-          {mapButton}
-          {updateButton}
-        </Box>
-      </Box>
+      <motion.div
+        variants={fadeInUp}
+        initial="hidden"
+        whileInView="visible"
+        viewport={{ once: true, amount: 0.4 }}
+        custom={0.1}
+        style={{ flex: 1,display: 'flex',  }}
+      >
+        <CardMedia
+          component="img"
+          image={img}
+          sx={{
+            // overflow: "visible",
+            boxShadow: 4,
+            width: "100%",
+            height: "auto",
+            borderRadius: .5,
+          }}
+        />
+      </motion.div>
+
+      <motion.div
+        variants={fadeInUp}
+        initial="hidden"
+        whileInView="visible"
+        viewport={{ once: true, amount: 0.4 }}
+        custom={0.2}
+        style={{ flex: 1 }}
+      >
+        <Typography variant="body1" color="text.primary" paragraph>
+          {text}
+          <br />
+          <br />
+          {text.split(" ").slice(10, 20).join(" ")}
+          {text.split(" ").slice(0, 20).join(" ")}...
+        </Typography>
+        <motion.div variants={fadeInUp} 
+        viewport= {{ once: true , amount: 0.2 }}
+        custom={0.2}>
+          <Button variant="default" fullWidth sx={{
+            border: '1px solid',
+            color: 'primary.main',
+            borderColor: 'primary.transparent',
+          }}>
+            Learn More
+          </Button>
+        </motion.div>
+      </motion.div>
     </Box>
   );
 }
+
+
+function SectionDiv({title, align, dark}) {
+  return <Box sx={{
+        transform: 'scale(1.15)',
+        transformOrigin: 'bottom center',
+ width: '100%',
+    display: 'flex',
+    flexDirection: align === 'left' ? 'row' : 'row-reverse' ,
+    justifyContent: align === 'left' ? 'flex-start' : align === 'right' ? 'flex-end' : 'center',
+    alignItems: 'center',
+    fontSize: '24px',
+    fontWeight: 'bold',
+  }} >  
+  {align=='center' ? <div style={{
+    opacity: 0.3,
+    width: '100%',
+    height: '1px',
+    backgroundColor: dark ? '#fff' : '#000',
+    margin: '  4px',
+  }} /> : null}
+  <Box sx={{
+    minWidth: 'max-content',
+    flex: 1,
+    textAlign: align === 'left' ? 'left' : align === 'right' ? 'right' : 'center',
+    px: 2,
+    fontSize: '36px',
+    ...(align === 'left' ? { 
+      pr: 2,
+    } : align === 'right' ? { 
+      pl: 2,
+    } : { 
+      px: 2,
+    }),
+    // fontWeight: 'bold',
+  }}>
+  <Typography variant="h4" color={dark ? '#fff' : "text.primary" } sx={{
+    fontSize: '1.725rem',
+    textTransform: 'uppercase',
+    letterSpacing: 1,
+    lineHeight: 1.2,
+    // color: dark ? '#fff' : "text.primary",
+  }}>
+  {title}
+  </Typography>
+  </Box>
+  <div style={{
+    opacity: 0.2,
+    width: '100%',
+    height: '.8px',
+    backgroundColor: dark ? '#fff' : '#000',
+    margin: '4px 16px',
+  }} />
+  </Box>
+}
+
+
 export default HomepageBody;

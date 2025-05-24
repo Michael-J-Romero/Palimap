@@ -9,7 +9,8 @@ const getTheme = (mode = 'light') =>
         ? {
             // Light theme colors
             primary: {
-              main:    '#5d8159',
+              main:    '#d2042d',
+              transparent:'#d2042d3d',
               
             },
             secondary: {

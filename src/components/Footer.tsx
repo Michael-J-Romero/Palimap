@@ -1,6 +1,8 @@
 import React from 'react';
 import { Box, Typography } from '@mui/material';
 import styled from 'styled-components';
+const darkBg = '#282936'
+
 
 const FooterContainer = styled(Box)`
   text-align: center;
@@ -13,11 +15,21 @@ const Footer = () => {
   return (
     <FooterContainer
     style={{
-              marginTop: '24px',
+                backgroundColor: darkBg,
+                color: '#ffffff',
+                padding: '4px 16px',
+                borderTop: '1px solid #444',
+                display: 'flex',
+                flexDirection: 'column',
+                alignItems: 'center',
+                justifyContent: 'center',
+                minHeight: '250px',
+              // marginTop: '24px',
     
               }}
     >
-      <Typography variant="body2">© {new Date().getFullYear()} Palisades Recovery. All rights reserved.</Typography>
+      <img src="/foot.png" alt="Logo" style={{ width: '100%', height: 'auto'}} />
+      {/* <Typography variant="body2">© {new Date().getFullYear()} Palisades Recovery. All rights reserved.</Typography> */}
     </FooterContainer>
   );
 };

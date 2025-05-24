@@ -1,6 +1,6 @@
 'use client';
 // components/Layout.jsx
-
+import './main.css';
 import React from 'react';
 import { CssBaseline, Container } from '@mui/material';
 import Header from './Header';
@@ -13,6 +13,12 @@ import { usePathname} from 'next/navigation';
 
 import { useAuth } from '@/context/AuthContext';
 import { Button } from '@mui/material';
+
+
+
+const fullScreenNO = false
+
+
 
 const AdminToggle = () => {
   const { toggleAdminMode, isAdminDevMode } = useAuth();
@@ -41,11 +47,10 @@ const Main = styled.main`
 const Wrapper = styled.div`
   display: flex;
   flex-direction: column;
-  min-height: 100vh;
  
   height: 100%;
   &.fullscreen {
-    height: 100vh;
+    // height: 100vh;
     overflow: hidden;
   }
 
@@ -56,7 +61,7 @@ const Layout = ({ children }) => {
   const pathname = usePathname();
   const fullScreen = 
   pathname === '/map' || pathname === '/map/'
-  ||pathname === '/'
+  // ||pathname === '/'
   ||pathname === '/map2' || pathname === '/map2/'
   || pathname?.startsWith('/community')
   return (
@@ -73,22 +78,28 @@ zIndex: 99999999,
         </div>
         <Header />
         <div style = {{
-          overflow: fullScreen ? 'hidden' : 'auto',
+
+
+//here
+          overflowsss: fullScreenNO ? 'hidden' : 'auto',
+//here
           height: '100%',
 
         }}>
-        <Container 
+        <div 
         //make fullscreen 
         sx={{ 
+          padding: 0,
           // height: '100%',
           ...fullScreen ? { height: '100%' } : { },
-          maxWidth: fullScreen ? '100%!important' : 'lg' , 
+          // maxWidth: fullScreen ? '100%!important' : 'lg' , 
+          maxWidth: 1? '100%!important' : 'lg' , 
         }}
         maxWidth="md" 
         disableGutters={fullScreen}>
           <Main >{children}
           </Main>
-        </Container>
+        </div>
         {(!fullScreen) && <Footer />}
         </div>
       </Wrapper>

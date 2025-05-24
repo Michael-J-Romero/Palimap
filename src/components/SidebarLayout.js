@@ -28,7 +28,7 @@ import "simplebar-react/dist/simplebar.min.css";
 import ImageCarousel from "./ImageCarousel";
 import Comments from "./Comments";
 import { settings as allSettings } from "@/data/builtIn";
-import React from "react";
+import React , { useState } from "react";
 
 
 
@@ -107,12 +107,148 @@ function LocationMenu() {
   );
 }
 
-function LocationLayout({ title, images, body, onClose }) {
+// import { useState } from "react"; 
+// import LocationMenu from "./LocationMenu";
+
+import Link from "next/link";
+ 
+
+ 
+
+
+
+  function LocationLayout({ locationId,mini,smallTitle, title, images, body, posts, height = 500 ,onClose}) {
   const theme = useTheme();
 
+  if (mini) {
+    return ( 
+        <Link href={`/map?location=${locationId}`} 
+        passHref legacyBehavior>
+      <Box
+        component="a"
+        sx={{
+          display: 'block',
+          textDecoration: 'none', // prevents underlined text
+          width: "100%",
+          maxWidth: 600,
+          mx: "auto",
+         
+          color: theme.palette.text.primary,
+          cursor: 'pointer',
+          mb: 5,
+          overflow: 'hidden',
+          transition: 'transform 0.2s ease',
+
+        }}
+      >
+        <Box
+          sx={{
+            
+            height,
+            position: 'relative',
+            overflow: 'hidden',
+          }}
+        >
+          <Box
+            component={motion.div}
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: 0.3 }}
+            sx={{
+              // px: 2,
+              pb: 8, // space for Read More button
+            }}
+          >
+            {/* Top Bar */}
+            <Box
+              sx={{
+                display: "flex",
+                alignItems: "center",
+                gap: 1,
+                py: 1,
+                borderBottom: `1px solid ${theme.palette.divider}`,
+                // backgroundColor: theme.palette.background.default,
+              }}
+            >
+              <Typography color="text.primary" variant="h6" fontWeight={400}>
+                {title}
+              </Typography>
+            </Box>
+<Box sx={{
+   borderRadius: 1,
+          bgcolor: theme.palette.background.default,
+          border: `1px solid ${theme.palette.text.primary}44`,
+          background: theme.palette.background.default,
+          boxShadow: theme.shadows[1],
+          // overflow: 'hidden',
+          '&:hover': {
+            // backgroundColor: theme.palette.background.default,
+            border: `1px solid ${theme.palette.text.primary}55`,
+            // transform: 'scale(1.01)',
+            boxShadow: theme.shadows[4],
+          },
+          
+}} >
+            {images?.length > 0 && (
+              <Box sx={{ mt: 0, mb: 0 }}>
+                <ImageCarousel images={images} height={225} flatBottom />
+              </Box>
+            )}
+
+            <Box >{posts}</Box>
+            <Box sx={{ px: 2 }}>{body}</Box>
+
+            {/* <Box sx={{ mt: 4 }} /> */}
+          {/* Fade-out gradient */}
+          <Box
+            sx={{
+              position: 'absolute',
+              bottom: 50,
+              // left: 0,
+              // right: 0,
+              width: '100%',
+              height: 80,
+              background: `linear-gradient(to bottom, transparent, ${theme.palette.background.default})`,
+              pointerEvents: 'none',
+              padding: '4px',
+              // overflow: 'hidden',
+            }}
+          />
+
+          {/* Read More Button */}
+          <Box
+            sx={{
+              position: 'absolute',
+              bottom: 0,
+              left: 0,
+              width: '100%',
+              bgcolor: theme.palette.background.default,
+              pt: 1.5,
+              textAlign: 'center',
+            }}
+          >
+            <Button  color="secondary" 
+            variant="outlined" size="large" fullWidth sx={{
+              borderTopLeftRadius: 0,
+              borderTopRightRadius: 0,
+            }}>
+              Read More
+            </Button>
+          </Box>
+            </Box>
+          </Box>
+
+        </Box>
+      </Box>
+    </Link>
+   );
+  }
+
+  // Full version (unchanged except no address requested)
   return (
     <Box
       sx={{
+       
         width: "100%",
         maxWidth: 600,
         mx: "auto",
@@ -126,19 +262,18 @@ function LocationLayout({ title, images, body, onClose }) {
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ duration: 0.3 }}
-          sx={{ px: 2, pt: 0, pb: 0 }}
         >
           {/* Top Bar */}
           <Box
             sx={{
               display: "flex",
               alignItems: "center",
-              gap: 1,
+              // gap: 1,
               position: "sticky",
-              top: 0,
-              backgroundColor: theme.palette.background.paper,
               zIndex: 10,
-              py: 1,
+              top: 0,
+              backgroundColor: theme.palette.background.default,
+              p: 1,
               borderBottom: `1px solid ${theme.palette.divider}`,
             }}
           >
@@ -154,12 +289,18 @@ function LocationLayout({ title, images, body, onClose }) {
                 />
               </Button>
             </Tooltip>
+              {smallTitle?
+          <Typography color="text.primary" variant="body2" fontWeight={400} fontSize={"1rem"}>
+            {title}
+          </Typography>
+              :
             <Typography color="text.primary" variant="h6" fontWeight={400}>
               {title}
             </Typography>
+            }
             <LocationMenu />
           </Box>
-
+<Box           sx={{ px: 2, pt: 0, pb: 0 }} >
           {/* Image Carousel */}
           {images && images.length > 0 &&
           <Box sx={{ mt: 0, mb: 0 }}>
@@ -167,17 +308,21 @@ function LocationLayout({ title, images, body, onClose }) {
           </Box>}
 
           {/* Body Content */}
-          <Box sx={{ mt: 3 }}>{body}</Box>
+          <Box sx={{ mt: 0}}>{body}</Box>
+          <Box sx={{ mt: 0 }}>{posts}</Box>
 
           {/* Comments */}
           <Box sx={{ mt: 4 }}>
            {images && images.length > 0 &&
             <Comments />
               }
-          </Box>
+          </Box></Box>
         </Box>
       </SimpleBar>
     </Box>
   );
 }
+
+
+
 export default LocationLayout;

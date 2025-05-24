@@ -25,6 +25,7 @@ import MenuIcon from '@mui/icons-material/Menu';
 import Brightness4Icon from '@mui/icons-material/Brightness4';
 import Brightness7Icon from '@mui/icons-material/Brightness7';
 import { useThemeContext } from '../context/ThemeContext';
+import LanguageIcon from '@mui/icons-material/Language';
 
 const StyledTabs = muiStyled(Tabs)(({ theme }) => ({
   minHeight: 48,
@@ -70,9 +71,14 @@ const Nav = () => {
   const isLoggedIn = false; // Replace later with real auth logic
 
   const navLinks = [
-    { label: 'Interactive Map', href: '/map' },
-    { label: 'Community', href: '/community' },
-    { label: 'Resources', href: '/resources' },
+    // { label: 'Interactive Map', href: '/map',shortLabel: 'Map' },
+    // { label: 'Community', href: '/community' },
+    // { label: 'Resources', href: '/resources' },
+    { label: 'Foundation', href: '/foundation' },
+    { label: 'Artist', href: '/artist' },
+    { label: 'Artwork', href: '/artwork' },
+    { label: 'Exhibitions', href: '/exhibitions' },
+    { label: 'Contact', href: '/contact' },
   ];
 
   const handleTabChange = (e, newValue) => {
@@ -96,8 +102,10 @@ const Nav = () => {
               } 
           onChange={handleTabChange}>
             {navLinks.slice(0, 2)
-            .map(({ label, href }) => (
-              <StyledTab key={href} value={href} label={label} />
+            .map(({ label, href,shortLabel }) => (
+              <StyledTab key={href} value={href} 
+              label={shortLabel || label}
+              />
             ))}
           </StyledTabs>
 
@@ -128,13 +136,16 @@ const Nav = () => {
             {isLoggedIn ? (
               <MenuItem onClick={(e) => setProfileAnchor(e.currentTarget)}>Profile</MenuItem>
             ) : (
-              <MenuItem onClick={() => setLoginOpen(true)}>Login</MenuItem>
+              // <MenuItem onClick={() => setLoginOpen(true)}>
+              < LanguageIcon sx={{  }} />
+                
+              // {/* </MenuItem> */}
             )}
-            <MenuItem onClick={toggleTheme}>
+            {/* <MenuItem onClick={toggleTheme}>
               <IconButton color="inherit">
                 {mode === 'dark' ? <Brightness7Icon /> : <Brightness4Icon />}
               </IconButton>
-            </MenuItem>
+            </MenuItem> */}
           </Menu>
         </>
       ) : (
@@ -148,12 +159,12 @@ const Nav = () => {
               <StyledTab key={href} value={href} label={label} />
             ))}
           </StyledTabs>
-
+{/* 
           <Tooltip title={mode === 'dark' ? 'Switch to light mode' : 'Switch to dark mode'}>
             <IconButton onClick={toggleTheme} color="inherit" sx={{ ml: 2 }}>
               {mode === 'dark' ? <Brightness7Icon /> : <Brightness4Icon />}
             </IconButton>
-          </Tooltip>
+          </Tooltip> */}
 
           {isLoggedIn ? (
             <>
@@ -171,18 +182,21 @@ const Nav = () => {
             </>
           ) : (
             <Button
-              variant="outlined"
+              variant=""
               color="inherit"
               onClick={() => setLoginOpen(true)}
               sx={{
                 borderRadius: '999px',
-                ml: 2,
+                // ml: 2,
+                p:0,
+                minWidth: 0,
+                width: 40,
+                // mr: 1,
                 textTransform: 'none',
                 fontWeight: 500,
-                px: 2.5,
               }}
             >
-              Login
+              < LanguageIcon sx={{  }} />
             </Button>
           )}
         </>

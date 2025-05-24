@@ -2,7 +2,7 @@
 import getData from "./data.js";
 import Details from '../details'; 
 import styled from "styled-components";
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, useRef,useContext } from "react";
 import Map1 from "./map";
 import List  from "./list";
 import dynamic from "next/dynamic";
@@ -14,6 +14,8 @@ import { useTheme } from "@mui/material/styles";
 import LocationModal from '@/components/Location'; // Your modal
 import SwipeableDrawer from "@mui/material/SwipeableDrawer";
 import MobileMapLayout from "./mobileMapLayout";
+import { AppContext } from '@/context/AppContext';
+
 const SplitMap = dynamic(() => import("../interactiveMap/index.js"), { ssr: false });
 
 let aa
@@ -31,6 +33,7 @@ function getScrollableParent(element) {
 }
 function App({ pageData,showModal,allData}) {
 
+  const { updateAppState } = useContext(AppContext);
   
   const {slug,type }= pageData || {};
   const [open, setOpen] = useState(true);
@@ -38,6 +41,10 @@ function App({ pageData,showModal,allData}) {
   const isMobile = useMediaQuery(theme.breakpoints.down("md"));
   const router = useRouter();
   const highlightedApn  = type==="apn" ? slug : null;
+  const highlightedLocation = type!=="apn" ? slug : null;
+  useEffect(() => {
+    updateAppState({highlightedApn, highlightedLocation})
+  }  , [highlightedApn, highlightedLocation]);
   let [showFireMap, setShowFireMap] = useState(true);
   useEffect(() => {
     if (slug !== null) {
@@ -45,13 +52,14 @@ function App({ pageData,showModal,allData}) {
     }
   }  , [slug]);
   const openLocation = (slug,type) => {
-    console.log("test3",{type,slug})
     if(type === "apn") {
       router.push(`/map?apn=${slug}`, undefined, { shallow: true });
     }
     else {
-    // else type is a manually submitted location post
+      // else type is a manually submitted location post
+      console.log("test3",{type,slug})
     router.push(`/map?location=${slug}`, undefined, { shallow: true });
+    
     }
     setOpen(true);
     setTimeout(() => {
@@ -60,6 +68,9 @@ function App({ pageData,showModal,allData}) {
       if (element) {
         // element.scrollIntoView({ block: "start"  });
         let container = getScrollableParent(element);
+        if (!container) {
+          container = document.documentElement; // Fallback to the document element
+        }
         container.scrollTo({
           top: 0,
           left: 0,
@@ -116,6 +127,7 @@ function App({ pageData,showModal,allData}) {
   return (
     <ContainerComponent 
     {...{
+      
       slug,
       forceOpen: setOpen,
       open, setOpen,
@@ -124,16 +136,19 @@ function App({ pageData,showModal,allData}) {
       setShowFireMap,
       selectedLocation,
       Map: showFireMap ?
-      <SplitMap {...{highlightedApn,open, setOpen,openLocation,itemData, setSelectedLocation,selectedMarker, setSelectedMarker }} />
+      <SplitMap {...{isMobile,highlightedApn,open, setOpen,openLocation,itemData, setSelectedLocation,selectedMarker, setSelectedMarker }} />
       :<Map1 {...{openLocation,itemData, setSelectedLocation,selectedMarker, setSelectedMarker }} />,
       List: showModal?
       <LocationModal
       pageData = {pageData}
       onClose={() => {
-        router.push('/map', undefined, { shallow: true }); // Remove query param
+        // router.push('/map', undefined, { shallow: true }); // Remove query param
+
+        //go back in history
+        window.history.back();
       }}
       />
-      :<List {...{openLocation,allData,itemData, selectedLocation,setSelectedLocation ,setSelectedMarker,selectedMarker,filterBy, setFilterBy}} />,
+      :<List {...{isMobile,openLocation,allData,itemData, selectedLocation,setSelectedLocation ,setSelectedMarker,selectedMarker,filterBy, setFilterBy}} />,
       Details: <Details {...{ selectedLocation,setSelectedLocation ,itemData ,pageData, setSelectedMarker}} />,
       
     }}
