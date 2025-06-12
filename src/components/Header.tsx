@@ -71,7 +71,7 @@ const Header = () => {
         }}>
           <img 
           // src="https://cdn-icons-png.flaticon.com/512/9356/9356230.png"
-          src="/pin2.PNG"
+          src="/pin2.png"
           // src="/logo.png"
           alt="logo"
           style={{
