@@ -28,13 +28,97 @@ import "simplebar-react/dist/simplebar.min.css";
 import ImageCarousel from "./ImageCarousel";
 import Comments from "./Comments";
 import { settings as allSettings } from "@/data/builtIn";
-import React from "react";
+import React , { useState } from "react";
 
 
 
 import NotificationsActiveIcon from "@mui/icons-material/NotificationsActive";
 import FlagIcon from "@mui/icons-material/Flag";
 import ShareIcon from "@mui/icons-material/Share";
+
+
+
+function TopbarTabs({ selectedTab, setSelectedTab, onAddPost }) {
+  const theme = useTheme();
+
+  const tabs = [
+    { label: "Info", value: "info" },
+    { label: "Posts", value: "posts" },
+    // { label: "Gallery", value: "poests" },
+  ];
+
+  return (
+    <Box
+      sx={{
+        display: "flex",
+        alignItems: "stretch",
+        justifyContent: "space-between",
+        // borderBottom: `1px solid ${theme.palette.divider}`,
+        pr: 2,
+        // py: 1.5,
+        backgroundColor: theme.palette.background.default,
+        position: "sticky",
+        top: 0,
+        zIndex: 10,
+      }}
+    >
+      {/* Tabs */}
+      <Box sx={{ display: "flex", gap: theme.spacing(1) }}>
+        {tabs.map((tab) => (
+          <Button
+            key={tab.value}
+            size="small"
+            variant="text"
+            onClick={() => setSelectedTab(tab.value)}
+            sx={{
+              px: 4,
+              borderRadius: 0,
+              backgroundColor:selectedTab === tab.value
+                ? theme.palette.background.paper
+                : "transparent",
+              borderBottom: selectedTab === tab.value
+                ? `1px solid ${theme.palette.primary.main}`
+                : "1px solid transparent",
+              paddingBottom: theme.spacing(0.5),
+              minWidth: "auto",
+            }}
+          >
+            <Typography
+              variant="body2"
+              color={
+                selectedTab === tab.value
+                  ? theme.palette.primary.main
+                  : theme.palette.text.primary
+              }
+              sx={{ fontWeight: selectedTab === tab.value ? 600 : 400 }}
+            >
+              {tab.label}
+            </Typography>
+          </Button>
+        ))}
+      </Box>
+
+      {/* Add Post Button */}
+      <Button
+        variant="contained"
+        color="primary"
+        size="small"
+        onClick={onAddPost}
+        sx={{ 
+          my: 1,
+          borderRadius: theme.shape.borderRadius, px: 2, py: 0.5 }}
+      >
+        <Typography variant="body2" fontWeight={500}>
+          + Add Post
+        </Typography>
+      </Button>
+    </Box>
+  );
+}
+
+
+
+
 
 function LocationMenu() {
   const theme = useTheme();
@@ -106,13 +190,135 @@ function LocationMenu() {
     </Box>
   );
 }
-
-function LocationLayout({ title, images, body, onClose }) {
+function Buttons() {
+  //a bar w 3 buttons: posts, info and +add post
   const theme = useTheme();
+  const [anchorEl, setAnchorEl] = useState(null);
+  return (
+    <Box sx={{ ml: "auto", display: "flex", alignItems: "center" }}>
+      <Button
+        size="small"
+        variant="text"
+        sx={{ minWidth: 0, p: 0.5 }}
+        onClick={() => alert("Posts coming soon!")}
+      >
+        <Typography variant="body2" color={theme.palette.text.primary}>
+          Posts
+        </Typography>
+      </Button>
+      <Button
+        size="small"
+        variant="text"
+        sx={{ minWidth: 0, p: 0.5 }}
+        onClick={() => alert("Info coming soon!")}
+      >
+        <Typography variant="body2" color={theme.palette.text.primary}>
+          Info
+        </Typography>
+      </Button>
+      <Button
+        size="small"
+        variant="contained"
+        color="primary"
+        sx={{ minWidth: 0, p: 0.5, ml: 1 }}
+        onClick={() => alert("Add post feature coming soon!")}
+      >
+        <Typography variant="body2">+ Add Post</Typography>
+      </Button>
+    </Box>
+  );
+}
+// import { useState } from "react"; 
+// import LocationMenu from "./LocationMenu";
 
+import Link from "next/link";
+ 
+
+ 
+
+
+
+  function LocationLayout({noPadding, openLocation,locationId,mini,smallTitle,subTitle, title, images, body, posts, height = 500 ,onClose}) {
+  const theme = useTheme();
+            const [selectedTab, setSelectedTab] = useState("posts");
+
+  if (mini) {
+    return (  
+      <Box
+        component="a"
+        sx={{
+          display: 'block',
+          textDecoration: 'none', // prevents underlined text
+          width: "100%",
+          maxWidth: 600,
+          mx: "auto",
+          color: theme.palette.text.primary,
+          cursor: 'pointer',
+          overflow: 'hidden',
+          transition: 'transform 0.2s ease',
+        }}      >
+            {/* Top Bar */}
+            <Paper
+            elevation={0}
+              sx={{
+                // display: "flex",
+                // alignItems: "center",
+                // gap: .5,
+                // py: 2,
+                // borderBottom: `1px solid ${theme.palette.divider}`,
+                // backgroundColor: theme.palette.background.default,
+                display: 'flex',
+                flexDirection: 'column-reverse',
+                alignItems: 'flex-start',
+                justifyContent: 'flex-start',
+  
+                // gap: .5,
+              }}
+            >
+              <Typography color="text.primary" variant="h6" fontWeight={400} sx={{
+              }}>
+                {title}
+              </Typography>
+                {subTitle && 
+              <Typography color="text.secondary" variant="body2" fontWeight={400} sx={{}}>
+                {subTitle}
+              </Typography>
+                
+              }
+            </Paper>
+ 
+            {images?.length > 0 && (
+              <Box sx={{ mt: 0, mb: 0 }}>
+                <ImageCarousel images={[images[0]]} height={225} flatBottom />
+              </Box>
+            )}
+
+            <Box >{posts}</Box>
+            <Box sx={{  }}>{body}</Box>
+            <Button
+              variant="outlined"
+              // color="primary"
+              size="large"
+              fullWidth sx={{
+                  mt: 1,
+                }}
+              >
+              {/* <Link href={`/locations/${locationId}`} style={{ textDecoration: 'none', color: theme.palette.primary.main }}> */}
+                <Typography variant="body2" fontWeight={700} color={theme.palette.primary.main} >
+                  View Full Post
+                </Typography>
+              {/* </Link> */}
+              </Button>
+            {/* <Comments /> */}
+      </Box>
+   );
+  }
+let isDarkMode = theme.palette.mode === "dark";
+  // Full version (unchanged except no address requested)
   return (
     <Box
       sx={{
+       
         width: "100%",
         maxWidth: 600,
         mx: "auto",
@@ -126,20 +332,25 @@ function LocationLayout({ title, images, body, onClose }) {
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ duration: 0.3 }}
-          sx={{ px: 2, pt: 0, pb: 0 }}
         >
           {/* Top Bar */}
-          <Box
+          <Paper
+            elevation={1}
+            square
+            variant={isDarkMode?
+            "elevation"
+            :"outlined"}
             sx={{
+              
               display: "flex",
               alignItems: "center",
-              gap: 1,
+              // gap: 1,
               position: "sticky",
-              top: 0,
-              backgroundColor: theme.palette.background.paper,
               zIndex: 10,
-              py: 1,
-              borderBottom: `1px solid ${theme.palette.divider}`,
+              top: 0,
+              // backgroundColor: theme.palette.background.default,
+              p: 1,
+              // borderBottom: `1px solid ${theme.palette.divider}`,
             }}
           >
             <Tooltip title="Back to map">
@@ -154,30 +365,52 @@ function LocationLayout({ title, images, body, onClose }) {
                 />
               </Button>
             </Tooltip>
+              {smallTitle?
+          <Typography color="text.primary" variant="body2" fontWeight={400} fontSize={"1rem"}>
+            {title}
+          </Typography>
+              :
             <Typography color="text.primary" variant="h6" fontWeight={400}>
               {title}
             </Typography>
+            }
             <LocationMenu />
-          </Box>
+          </Paper>
+            {/* <Buttons/> */}
 
+{/* <TopbarTabs
+  selectedTab={selectedTab}
+  setSelectedTab={setSelectedTab}
+  onAddPost={() => setShowAddPostDialog(true)}
+/> */}
+<Box           sx={{
+              px:0,
+  
+   pt: 0, pb: 0 }} >
           {/* Image Carousel */}
           {images && images.length > 0 &&
           <Box sx={{ mt: 0, mb: 0 }}>
-            <ImageCarousel images={images} height={280} />
+            <ImageCarousel allFlat images={images} height={280} />
           </Box>}
 
           {/* Body Content */}
-          <Box sx={{ mt: 3 }}>{body}</Box>
+          <Box sx={{ 
+            px:  noPadding ? 0 : 2,
+            mt: 0}}>{body}</Box>
+          <Box sx={{ mt: 0 }}>{posts}</Box>
 
           {/* Comments */}
           <Box sx={{ mt: 4 }}>
            {images && images.length > 0 &&
             <Comments />
               }
-          </Box>
+          </Box></Box>
         </Box>
       </SimpleBar>
     </Box>
   );
 }
+
+
+
 export default LocationLayout;

@@ -8,10 +8,10 @@ export default function MapLayout({
     // overlay: React.ReactNode;
   }) {
     return (
-      <>
+      <div className="map-page">
         {children}
         {/* {overlay} */}
-      </>
+      </div>
     );
   }
   

@@ -6,7 +6,7 @@ const FooterContainer = styled(Box)`
   text-align: center;
   padding: 1.5rem;
   margin-top: auto;
-  background-color: ${({ theme }) => theme.palette.background.paper};
+  background-color: ${({ theme }) => theme.palette.background.subtle};
 `;
 
 const Footer = () => {

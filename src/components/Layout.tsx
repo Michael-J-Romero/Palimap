@@ -1,6 +1,6 @@
 'use client';
 // components/Layout.jsx
-
+import './main.css';
 import React from 'react';
 import { CssBaseline, Container } from '@mui/material';
 import Header from './Header';
@@ -41,11 +41,10 @@ const Main = styled.main`
 const Wrapper = styled.div`
   display: flex;
   flex-direction: column;
-  min-height: 100vh;
  
   height: 100%;
   &.fullscreen {
-    height: 100vh;
+    // height: 100vh;
     overflow: hidden;
   }
 

@@ -20,18 +20,34 @@ import LabelIcon from "@mui/icons-material/Label";
 import InfoIcon from "@mui/icons-material/Info";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import {highlightParcelWithFireData} from "./highlightParcel";
+import { getParcelAtCoords } from './utilities';
+
 function Search({ value, onChange }) {
+  return (<AddressAutocomplete
+    value={value}
+    onChange={()=>{}}
+    placeholder="Search"
+    sx={{
+      width: '100px',
+      backgroundColor: 'background.paper',
+      borderRadius: 2,
+      '& .MuiOutlinedInput-root': {
+        borderRadius: 2,
+      },
+    }}
+  />)
   return (
     <TextField
     
       variant="outlined"
-      placeholder="Search for a location"
+      placeholder="Search"
       value={value}
       // component={AddressAutocomplete}
       onChange={onChange}
       size="small"
       // fullWidth
       sx={{
+        width: 'max-content',
         backgroundColor: 'background.paper',
         borderRadius: 2,
         '& .MuiOutlinedInput-root': {
@@ -41,7 +57,6 @@ function Search({ value, onChange }) {
       // make input field use AddressAutocomplete
       
       InputProps={{
-        component: AddressAutocomplete,
         startAdornment: (
           <InputAdornment position="start">
             <SearchIcon />
@@ -120,13 +135,14 @@ const InfoDialog = ({showInfo, setShowInfo}) => {
 }
 
 function SplitMapComparison(props) {
-  const { setMapRef,openLocation,highlightedApn } = props;
+  const { setMapRef,openLocation,highlightedApn,isMobile,opacity} = props;
+  const mapPadding = isMobile ? '6px' : '12px';
   const mapContainerRef = useRef(null);
   const mapRef = useRef(null);
   const basemapLayer = useRef(null);
   const [mapMode, setMapMode] = useState("map");
-  const [activeLayers, setActiveLayers] = useState(["Parcels"]);
-  const [showFilters, setShowFilters] = useState(true);
+  const [activeLayers, setActiveLayers] = useState(isMobile?[]:["Parcels"]);
+  const [showFilters, setShowFilters] = useState(!isMobile);
   const [showInfo, setShowInfo] = useState(false);
   const highlightRef = useRef(null);
   useEffect(() => {
@@ -143,17 +159,57 @@ function SplitMapComparison(props) {
     console.log(apn, statusLabel, bounds,layer, map)
   }
   const baseOptions = {
+    crossOrigin: 'anonymous',
            maxZoom: 20,
         minZoom: 10,
+        // size of each tile in pixels (default is 256)
+          tileSize:  256,
+  useCache: true, // if using leaflet.tilelayer.cache plugin
+// if your server supports it
+    keepBuffer: 3// number of tiles outside the viewport to preload
   }
-  const basemaps = {
+
+  // Save original fetch
+const originalFetch = window.fetch;
+
+// Override it
+window.fetch = async (...args) => {
+  const response = await originalFetch(...args);
+  if (!response.ok) {
+    const reason = await extractReason(response);
+    throw new Error(`Fetch failed: ${response.status} ${response.statusText}\nReason: ${reason}`);
+  }
+  return response;
+};
+
+// Optional: helper to extract JSON/text reason
+async function extractReason(response) {
+  try {
+    const contentType = response.headers.get("content-type");
+    if (contentType && contentType.includes("application/json")) {
+      const json = await response.clone().json();
+      return JSON.stringify(json);
+    } else {
+      return await response.clone().text();
+    }
+  } catch (e) {
+    return "[No readable body]";
+  }
+}
+let key = '9tzfMHxgQ1N5Vs27HZKb'
+  const basemaps = (esri)=>({
     map: {
+
+      // "Esri Topo": esri.basemapLayer("Topographic"),
+            "Esri Topo": L.tileLayer("https://server.arcgisonline.com/ArcGIS/rest/services/World_Topo_Map/MapServer/tile/{z}/{y}/{x}", { attribution: "Tiles © Esri" ,...baseOptions}),
+
+      "Esri Topo2": L.tileLayer(`https://api.maptiler.com/maps/basic-v2/?key=9tzfMHxgQ1N5Vs27HZKb#15.1/34.00841/-118.47223`,
+         { attribution: "Tiles © Esri" ,...baseOptions}),
       "Esri Street": L.tileLayer("https://server.arcgisonline.com/ArcGIS/rest/services/World_Street_Map/MapServer/tile/{z}/{y}/{x}", { attribution: "Tiles © Esri",...baseOptions }),
       "OpenTopoMap": L.tileLayer("https://{s}.tile.opentopomap.org/{z}/{x}/{y}.png", { attribution: "© OpenTopoMap" }),
       "Esri Dark Gray": L.tileLayer("https://server.arcgisonline.com/ArcGIS/rest/services/Canvas/World_Dark_Gray_Base/MapServer/tile/{z}/{y}/{x}", { attribution: "Tiles © Esri" ,...baseOptions}),
       "OSM Humanitarian": L.tileLayer("https://{s}.tile.openstreetmap.fr/hot/{z}/{x}/{y}.png", { attribution: "© OpenStreetMap contributors, Humanitarian OSM Team",...baseOptions }),
       "OpenStreetMap Standard": L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", { attribution: "© OpenStreetMap contributors",...baseOptions }),
-      "Esri Topo": L.tileLayer("https://server.arcgisonline.com/ArcGIS/rest/services/World_Topo_Map/MapServer/tile/{z}/{y}/{x}", { attribution: "Tiles © Esri" ,...baseOptions}),
       "Esri Satellite": L.tileLayer("https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}", { attribution: "Tiles © Esri",...baseOptions }),
     },
     satellite: {
@@ -173,9 +229,10 @@ function SplitMapComparison(props) {
         fn:makeFireMap3
       }
      },
-  };
+  });
   function makeParcelMap(map, fn, options) {
     const {lowOpacity} = options;
+    // const lowOpacity=false;
     let layer = L.tileLayer(
       "https://public.gis.lacounty.gov/public/rest/services/LACounty_Cache/LACounty_Parcel/MapServer/tile/{z}/{y}/{x}",
       {
@@ -192,11 +249,11 @@ function SplitMapComparison(props) {
     //On zoom
     const container =  layer.getContainer()
     if(lowOpacity) {
-      layer.setOpacity(.7);
+      // layer.setOpacity(.8);
       L.DomUtil.addClass(container, 'greyscale-lightest');
     }
     else {
-      layer.setOpacity(.8);
+      // layer.setOpacity(1);
       L.DomUtil.addClass(container, 'greyscale');
     }
     function handleZoom() {
@@ -229,7 +286,7 @@ function SplitMapComparison(props) {
     let cleaner = () => {
       map.off("zoomend", handleZoom);
       map.removeLayer(layer);
-      c()
+      // c()
       
       
     };
@@ -248,6 +305,7 @@ function SplitMapComparison(props) {
         replacesBase:true,
         fn:makeFireMap3,
       },
+      "Labels": L.tileLayer("https://server.arcgisonline.com/ArcGIS/rest/services/Reference/World_Transportation/MapServer/tile/{z}/{y}/{x}", { attribution: "© Esri", pane: "topOverlay" }),
       // "Labels": L.tileLayer("https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.pbf", { attribution: "© Esri", pane: "topOverlay" }),
       // "Roads": L.tileLayer("https://server.arcgisonline.com/ArcGIS/rest/services/Reference/World_Transportation/MapServer/tile/{z}/{y}/{x}", { attribution: "© Esri", pane: "topOverlay" }),
       // "Hillshade": L.tileLayer("https://server.arcgisonline.com/ArcGIS/rest/services/Elevation/World_Hillshade/MapServer/tile/{z}/{y}/{x}", { attribution: "© Esri", pane: "topOverlay", opacity: 0.3 }),
@@ -276,6 +334,8 @@ function SplitMapComparison(props) {
   };
   // Setup map once
   function renderMap(map,cleaners,onMapClick) {
+import('esri-leaflet').then((esri) => {
+    
     let replacesBase = false;
     Object.keys(overlays[mapMode]).forEach((name) => {
       const layer = overlays[mapMode][name];
@@ -295,15 +355,23 @@ function SplitMapComparison(props) {
     if (replacesBase) {
       return;
     }
-    const base = Object.values(basemaps[mapMode])[0];
+    const base = Object.values(basemaps(esri)[mapMode])[0];
     if(base.complex){
       let cleaner=base.fn(map, () => {}, { borderOnly: true,onMapClick ,...base.options});
       cleaners.push(cleaner);
     }
     else{
+      base.on('tileerror', function (event) {
+    console.error( event);
+    throw new Error("Tile error");
+    // You can also alert, send logs to a server, or display a fallback tile
+  });
     base.addTo(map);
+    // map.invalidateSize();
+ 
     // basemapLayer.current = base;
     }
+  });    
   }
   useEffect(() => {
     if (mapRef.current) {
@@ -314,6 +382,8 @@ function SplitMapComparison(props) {
         highlightRef.current = null;
       }
       highlightParcelWithFireData(map, {
+        props,
+        moveTo:true,
         apn:highlightedApn
     }).then((e)=>{
       highlightRef.current = e;
@@ -326,6 +396,43 @@ function SplitMapComparison(props) {
     }
   }
   }, [highlightedApn]);
+
+
+const hoverRef = useRef(null);
+const [hoveredApn, setHoveredApn] = useState(null);
+
+   useEffect(() => {
+    return
+    if (mapRef.current) {
+
+      let map = mapRef.current;
+      if (hoverRef.current) {
+        hoverRef.current();
+        hoverRef.current = null;
+      }
+      console.log("latlng2",hoveredApn)
+              console.log("parcel2" )
+
+      highlightParcelWithFireData(map, {
+        props,
+        moveTo:false,
+        parcel: hoveredApn,
+        // latlng: hoveredApn,
+        // apn:hoveredApn
+    }).then((e)=>{
+              console.log("parcel2" )
+
+      hoverRef.current = e;
+    })
+  }
+  return () => {
+    if (hoverRef.current) {
+      hoverRef.current();
+      hoverRef.current = null;
+    }
+  }
+  }, [hoveredApn]);
+
   useEffect(() => {
     let cleaners = [];
     (function patchTiles() {
@@ -348,15 +455,118 @@ function SplitMapComparison(props) {
         maxZoom: 20,
         minZoom: 10,
         zoomControl: false,
-        crs: L.CRS.EPSG3857
+        crs: L.CRS.EPSG3857,
+          // preferCanvas: true, // use canvas instead of DOM rendering
+  // updateWhenIdle: true, // don't update tiles while panning
+  // inertia: false, // reduce CPU load
+  // zoomAnimation: false, // optional: smoother on slow devices
       });
+      let clickTimeout;
+      async function handleClick(e) { 
+
+         if (e.originalEvent.detail === 2) return;
+            if(e.originalEvent.target.className=="leaflet-sbs-range"){
+                return;
+            }
+            clearTimeout(clickTimeout);
+            clickTimeout = setTimeout(async() => {
+                
+              
+              const { lat, lng } = e.latlng;
+              const parcel = await getParcelAt(map,lat, lng);
+              
+              if (parcel) {
+          console.log('Clicked parcel:', parcel.attributes);
+          onMapClick({apn:parcel.attributes.APN,statusLabel:parcel.attributes.STATUS_LABEL,bounds:parcel.geometry.coordinates,layer:parcel,map})
+          // L.popup()
+          //   .setLatLng([lat, lng])
+          //   .setContent(`<pre>${JSON.stringify(parcel.attributes, null, 2)}</pre>`)
+          //   .openOn(map);
+        } else {
+          console.log('No parcel found at this location.');
+        }
+      }, 250);
+      }
+           
+        
+        const onDouble = function (e) {
+            clearTimeout(clickTimeout);
+        }
+
+        function handleHover(apn) { 
+        }
+        function handleHoverEnd() { 
+        }
+
+//if the user doesn't move the mouse for one full seconds then it will try to set hoveredapn to whatever parcel is under the mouse
+
+      let  hoverTimeout = (null);
+      let tracker = {c:0}
+      function handleMouseMove(e){
+        tracker.c++;
+        const currentTracker = tracker.c;
+        clearTimeout(hoverTimeout); 
+        hoverTimeout = setTimeout(async() => {
+          if (currentTracker !== tracker.c) return; // Ignore if mouse moved again
+              
+          //enable hovering
+          // let parcel = await getParcelAtCoords(map, e.latlng.lat, e.latlng.lng);
+          // console.log(parcel,"parcel7")
+          // setHoveredApn(parcel);
+
+
+
+
+          // setHoveredApn(e.latlng);
+          //     console.log("parcel2",e.latlng)
+        }, 500); 
+      }
+      map.on('mousemove', handleMouseMove);
+      map.on('click', handleClick);
+      map.on('dblclick', onDouble);
+      // map.on()
+//       map.dragging.disable();
+//       map.touchZoom.disable();
+//       map.doubleClickZoom.disable();
+//       map.scrollWheelZoom.disable();
+// function handleMoveEndUnlock() {
+//   map.dragging.enable();
+//   map.touchZoom.enable();
+//   map.doubleClickZoom.enable();
+//   map.scrollWheelZoom.enable();
+//   map.off('moveend', handleMoveEndUnlock);
+// }
+//       map.on('moveend', handleMoveEndUnlock);
+
+      cleaners.push(() => {
+        clearTimeout(clickTimeout);
+        clearTimeout(hoverTimeout);
+
+        // map.dragging.enable();
+        // map.touchZoom.enable();
+        // map.doubleClickZoom.enable();
+        // map.scrollWheelZoom.enable();
+        // map.off('moveend', handleMoveEndUnlock);
+        
+        map.off('click', handleClick);
+        map.off('dblclick', onDouble);
+      });
+
+
+
     highlightParcelWithFireData(map, {
+      props,
         apn:highlightedApn,moveTo:true
     }).then((e)=>{
       highlightRef.current = e;
     })
-      L.control.zoom({ position: "topright" }).addTo(map);
-      if (setMapRef) setMapRef(map); 
+
+
+
+// if(!isMobile){
+      L.control.zoom({ position: isMobile?"bottomright":"bottomright" }).addTo(map);
+// }   
+if (setMapRef) setMapRef(map); 
       mapRef.current = map;
       map.createPane("topOverlay");
       map.getPane("topOverlay").style.zIndex = 900;
@@ -368,6 +578,8 @@ function SplitMapComparison(props) {
 
     return () => {
       cleaners.forEach((cleaner) => cleaner());
+      // map.off("click", handleClick);
+      // map.off("dblclick", onDouble);
       mapRef.current?.remove()
     };
   }, []);
@@ -380,11 +592,15 @@ function SplitMapComparison(props) {
 
     map.eachLayer((layer) => {
       if (layer.options?.preserveOnBasemapSwitch) return; // ✅ keep this one
+      if (layer?.preserveOnBasemapSwitch) return; // ✅ keep this one
+      if (layer?.options?.pane=='markerPane3') return; // ✅ keep this one
+      console.log(layer,"layerer2")
       map.removeLayer(layer);
     }); 
     renderMap(map,cleaners,onMapClick);
     return () => {
       cleaners.forEach((cleaner) => cleaner());
+
       // map.eachLayer((layer) => {
       //   if (layer.options?.preserveOnBasemapSwitch) return; // ✅ keep this one
       //   map.removeLayer(layer);
@@ -411,29 +627,47 @@ function SplitMapComparison(props) {
       backgroundColor: mapMode === mm ? "primary" : "background.primary.default",
     },
   })
+  console.log("map modeanimatedOpacity", opacity);
   return (
-    <div style={{ height: "100%", width: "100%", position: "relative" }}>
+    <div id="map" 
+     style={{ height: "100%", width: "100%", position: "relative" }}>
       {/* new post (bottom right) all mui components available for use (ill update imports use whatever)*/}
       <Box
         sx={{
           position: "absolute",
-          bottom: 12,
-          left: 12,
+          bottom: mapPadding,
+          left: mapPadding,
           zIndex: 1000,
         }} 
         >
         <InfoDialog {...{showInfo, setShowInfo}}/>
-      <AddPostButton/> 
+      {/* <AddPostButton/>  */}
       </Box>
+
+      <Box
+        sx={{
+          opacity: opacity===undefined? 1 : opacity,
+
+          position: "absolute",
+          top: mapPadding,
+          right: mapPadding,
+          zIndex: 1000,
+        }} 
+        >
+          <Search/>
+      </Box>
+
+
       {/* layers */}
       <Box
       
           
         sx={{
+          opacity: opacity===undefined? 1 : opacity,
           pointerEvents: "none",
           position: "absolute",
-          top: 12,
-          left: 12,
+          bottom: mapPadding,
+          left: mapPadding,
           zIndex: 1000,
           display: "flex",
           flexDirection: "column",
@@ -443,7 +677,7 @@ function SplitMapComparison(props) {
         <Box 
         sx = {{
           display: "flex",
-          flexDirection: "row",
+          flexDirection: "column-reverse",
           gap: 1,
           alignItems: "flex-start",
 
@@ -474,7 +708,6 @@ function SplitMapComparison(props) {
           <Layers
           {...{showFilters, mapMode,setShowFilters, activeLayers, setActiveLayers}}
           />
-          {/* <Search/> */}
         </Box>
         {/* <InfoButton {...{showInfo, setShowInfo}}/> */}
         <Box
@@ -540,33 +773,60 @@ const Layers = ({
   }
   let layerIcons2 = [...layerIcons];
   if (mapMode === "map") {
-    layerIcons2.pop();
+    // layerIcons2.pop();
   }
   return (
 
     <Box
       sx={{
+        flexDirection: "column",
         display: "flex",
         alignItems: "center",
         gap: isSmall ? 0.9 : 1,
         backgroundColor: "background.paper", //make transparent
         // backgroundColor: showFilters ? "#00000088" : "#00000022",
         // boxShadow: 3,
-        borderRadius: 1,
-        p: isSmall ? 0.7 : 1,
+        // borderRadius: 1,
+        px:showFilters ?1: 0.5,
+        py: 1,
+        borderRadius: showFilters ? 1 : 2,
+        transition: "all 0.2s",
         width: "auto",
         pointerEvents: "all",
       }}
-    >
-      <LayersIcon 
+    ><div>
+
+          
+      <Button
         onClick={() => setShowFilters(!showFilters)}
-        sx={{ 
-          color: "text.primary",
-          fontSize: isSmall ? 20 : 24 }}
-      />
+        sx={{
+          minWidth:20,
+          height: 20,
+          borderRadius: 1,
+          p: 0,
+        }}
+      >
+        <LayersIcon 
+          onClick={() => setShowFilters(!showFilters)}
+          sx={{ 
+            color: "text.primary",
+            fontSize: isSmall ? 16 : 20 }}
+            />
+            {showFilters && <Box px={1} >Layers</Box>}
+        <ExpandMoreIcon
+          sx={{
+            color: "text.primary",
+            fontSize: 17,
+            marginLeft: '-5px',
+            transform: showFilters ? "rotate(90deg)" : "rotate(270deg)",
+            transition: "transform 0.2s",
+          }}
+        />
+      </Button>
+          </div>
       {layerIcons2.map(({ key, icon, label, color, description }) => (
         <Tooltip title={`${label}: ${description}`} arrow key={key} 
-          placement="bottom" 
+          placement="right" 
             componentsProps={{
     tooltip: {
       sx: {
@@ -582,15 +842,16 @@ const Layers = ({
             color= "grey"
             sx={{
               border: "1px solid white",
-              minWidth: showFilters ? (isSmall ? 48 : 60) : (isSmall ? 30 : 36),
-              height: showFilters ? (isSmall ? 48 : 60) : (isSmall ? 30 : 36),
-              flexDirection: "column",
+              minWidth: showFilters ? (isSmall ? '100%' : '100%') : (isSmall ? 24 : 30),
+              // height: showFilters ? (isSmall ? 48 : 60) : (isSmall ? 30 : 36),
+              flexDirection: "row",
+              justifyContent: "space-between",
               backgroundColor: activeLayers.includes(key) ? (color+' ') 
                : "#666", 
               color: activeLayers.includes(key) ? '#000' :"#bbb" ,
               borderRadius: showFilters ? 0.5 : 2,
-              p: showFilters ? 1:
-              isSmall ? 0.25 : 0.5,
+              p: showFilters ? .5:
+              isSmall ? .5 : .75,
               transition: "all 0.2s",
             }}
           >
@@ -603,37 +864,64 @@ const Layers = ({
                 component="span"
                 sx={{
                   fontSize: isSmall ? 10 : 12,
-                  mt: 0.5,
-                  textAlign: "center",
-                  lineHeight: 1.2,
+                  ml: 0.5,
+                  textAlign: "left",
+                  lineHeight: 1,
+                  flexGrow: 1,
                 }}
               >
                 {label}
               </Box>
+             
             )}
+             {showFilters && (
+              <input
+                type="checkbox"
+                checked={activeLayers.includes(key)}
+                size='small' 
+                color="default"
+                variant="outlined"
+                // checkedIcon={icon}
+                // onChange={() => toggleLayer(key)}
+                sx={{
+                  // color: activeLayers.includes(key) ? color : "#bbb",
+                  "&.Mui-checked": {
+                    // color: color,
+                  },
+                }}
+              />
+             )}
           </Button>
         </Tooltip>
       ))}
-      <Button
-        onClick={() => setShowFilters(!showFilters)}
-        sx={{
-          minWidth: isSmall ? 30 : 36,
-          height: isSmall ? 30 : 36,
-          borderRadius: 2,
-        }}
-      >
-        <ExpandMoreIcon
-          sx={{
-            color: "text.primary",
-            fontSize: isSmall ? 20 : 24,
-            transform: showFilters ? "rotate(180deg)" : "rotate(0deg)",
-            transition: "transform 0.2s",
-          }}
-        />
-      </Button>
     </Box>
   );
 };
+async function getParcelAt(map,lat, lng) {
+  const url = 'https://public.gis.lacounty.gov/public/rest/services/LACounty_Cache/LACounty_Parcel/MapServer/identify';
+  const params = new URLSearchParams({
+    f: 'json',
+    tolerance: 1, 
+    returnGeometry: true,
+    imageDisplay: '800,600,96', // this
+    mapExtent: getMapExtent(map),
+    geometryType: 'esriGeometryPoint',
+    geometry: `${lng},${lat}`, // note: x,y = lon,lat
+    sr: '4326',
+    layers: 'all:0',
+  });
+
+  const response = await fetch(`${url}?${params}`);
+  const data = await response.json();
+  return data.results?.[0]; // first matching parcel
+}
+
+function getMapExtent(map) {
+  const bounds = map.getBounds();
+  const sw = bounds.getSouthWest();
+  const ne = bounds.getNorthEast();
+  return `${sw.lng},${sw.lat},${ne.lng},${ne.lat}`; // xmin,ymin,xmax,ymax
+}
 
 
 

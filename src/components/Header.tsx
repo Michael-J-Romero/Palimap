@@ -11,7 +11,7 @@ import {settings as allSettings} from '@/data/builtIn'
 const settings=allSettings
 
 const Logo = styled(Typography)`
-  font-weight: bold;
+  font-weight: 100;
   letter-spacing: 1px;
   // flex-grow: 1;
 `;
@@ -24,6 +24,7 @@ const Header = () => {
   //router
   const router = useRouter();
   return(<AppBar 
+    id="primary-header"
     position= "sticky" // make it sticky
     // make it sticky
 
@@ -56,7 +57,7 @@ const Header = () => {
 
             display: 'flex',
             justifyContent: 'space-between',
-            padding: '0 2rem',
+            px: { xs: 1, sm: 1 },
         }}
         
     >
@@ -69,14 +70,17 @@ const Header = () => {
         alignItems: 'center' 
         }}>
           <img 
-          src="/logo.png"
+          // src="https://cdn-icons-png.flaticon.com/512/9356/9356230.png"
+          src="/pin2.PNG"
+          // src="/logo.png"
           alt="logo"
           style={{
-          width: 45,
-          height: 45, 
-          marginLeft: -8,
+          width: 29,
+          height: 38, 
+          filter: 'grayscale(.4)',
+          // marginLeft: -8,
           // scale: 1.1,
-          marginRight: 8,
+          marginRight: 4,
           }}
           />
           
@@ -85,7 +89,14 @@ const Header = () => {
       onClick={() => router.push('/', undefined, { shallow: true })}
 
       variant="h6" 
+      fontWeight="100"
       sx={{ 
+
+    //         align-self: flex-end;
+    // margin-bottom: 2px;
+    alignSelf: 'flex-end',
+
+        fontWeight: 'normal',
         display: { xs: 'none', sm: 'block' },
         flexGrow: 0,
 cursor: 'pointer',
@@ -97,13 +108,13 @@ cursor: 'pointer',
        color="primary">
         PaliMap
        </Logo>
-       <Typography variant="subtitle" color="text.secondary" 
+       {/* <Typography variant="subtitle" color="text.secondary" 
        sx={{
          ml: 2,
          display: { sm: 'none', md: 'block',xs: 'none' },
          }}>
        Rebuilding Together
-      </Typography>
+      </Typography> */}
       </Box>
       <Nav />
     </Toolbar>

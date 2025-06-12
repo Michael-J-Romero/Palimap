@@ -26,7 +26,7 @@ const categories = types//.map((type) => type.name);
 // const categories = ["Fire", "Flood", "Earthquake", "Other"];
 
 
-export default function NewPostButton({ButtonComponent}) {
+export default function NewPostButton({ButtonComponent,text}) {
   const [open, setOpen] = useState(false);
   const [form, setForm] = useState({
     title: "",
@@ -54,7 +54,7 @@ export default function NewPostButton({ButtonComponent}) {
 const ButtonComponentUsed = ButtonComponent || ButtonComponentDefault;
   return (
     <>
-      <ButtonComponentUsed onClick={() => setOpen(true)}/>
+      <ButtonComponentUsed text={text} onClick={() => setOpen(true)}/>
 
 
       <Dialog open={open} onClose={() => setOpen(false)} maxWidth="sm" fullWidth>
@@ -210,7 +210,7 @@ const ButtonComponentUsed = ButtonComponent || ButtonComponentDefault;
   );
 }
 
-const ButtonComponentDefault = ({onClick}) => {
+const ButtonComponentDefault = ({onClick,text}) => {
 
   const theme = useTheme();
 
@@ -222,8 +222,8 @@ const ButtonComponentDefault = ({onClick}) => {
           whiteSpace: "nowrap",
           width: "max-content",
           px: 2,
-          py: 1,
-          borderRadius: 3,
+          py: .5,
+          borderRadius: 1,
           textTransform: "none",
           fontWeight: 600,
           boxShadow: theme.shadows[3],
@@ -242,7 +242,9 @@ const ButtonComponentDefault = ({onClick}) => {
         }}
       >
         <Typography variant="button" fontWeight={600}>
-          New Post
+          {
+          text? text
+          : 'New Post'}
         </Typography>
       </Button>
 }

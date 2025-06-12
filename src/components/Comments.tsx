@@ -18,11 +18,15 @@ import {
   List,
   ListItem,
   ListItemText,
+
 } from "@mui/material";
 import { useTheme } from "@mui/material/styles";
 
 export default function Main() {
-  return<Paper elevation={3} sx={{ p: 2, borderRadius: .3 }}>
+  return<Box  sx={{
+    backgroundColor: 'background.subtle',
+    color: 'text.primary',
+    p: 2, borderRadius: .3 }}>
     <Typography variant="h6" gutterBottom>
       Comments
     </Typography>
@@ -30,10 +34,14 @@ export default function Main() {
     <Stack direction="row" spacing={2} mb={2}>
       <Avatar src="/avatar-placeholder.png" />
       <TextField
+        variant="outlined"
+        label="Leave a comment..."
+        sx={{
+          // backgroundColor: 'background.default',
+        }}
         fullWidth
         multiline
         minRows={2}
-        placeholder="Leave a comment..."
       />
     </Stack>
 
@@ -45,7 +53,7 @@ export default function Main() {
     <Divider sx={{ mb: 2 }} />
 
     <Comments />
-  </Paper>;
+  </Box>;
 }
 
 function Comments() {
@@ -114,16 +122,16 @@ function Comments() {
       md={5}
       lg={6}
       sx={{
-        padding: "24px",
-        backgroundColor: theme.palette.background.subtle,
+        // padding: "24px",
+        backgroundColor: theme.palette.background.paper,
         overflowY: "auto",
         height: "100%",
       }}
     >
       {/* <Paper sx={{ padding: "16px", maxWidth: "800px", margin: "0 auto" }}> */}
-      <Typography variant="h6" fontWeight="bold" gutterBottom>
+      {/* <Typography variant="h6" fontWeight="bold" gutterBottom>
         Comments
-      </Typography>
+      </Typography> */}
 
       {/* Comments List */}
       <List>

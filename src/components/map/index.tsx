@@ -2,7 +2,7 @@
 import getData from "./data.js";
 import Details from '../details'; 
 import styled from "styled-components";
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, useRef,useContext } from "react";
 import Map1 from "./map";
 import List  from "./list";
 import dynamic from "next/dynamic";
@@ -14,6 +14,9 @@ import { useTheme } from "@mui/material/styles";
 import LocationModal from '@/components/Location'; // Your modal
 import SwipeableDrawer from "@mui/material/SwipeableDrawer";
 import MobileMapLayout from "./mobileMapLayout";
+// import Details from '../details';
+import { AppContext } from '@/context/AppContext';
+
 const SplitMap = dynamic(() => import("../interactiveMap/index.js"), { ssr: false });
 
 let aa
@@ -31,13 +34,19 @@ function getScrollableParent(element) {
 }
 function App({ pageData,showModal,allData}) {
 
+  const { updateAppState } = useContext(AppContext);
   
   const {slug,type }= pageData || {};
   const [open, setOpen] = useState(true);
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("md"));
   const router = useRouter();
+  const searchParams = useSearchParams();
   const highlightedApn  = type==="apn" ? slug : null;
+  const highlightedLocation = type!=="apn" ? slug : null;
+  useEffect(() => {
+    updateAppState({highlightedApn, highlightedLocation})
+  }  , [highlightedApn, highlightedLocation]);
   let [showFireMap, setShowFireMap] = useState(true);
   useEffect(() => {
     if (slug !== null) {
@@ -45,14 +54,16 @@ function App({ pageData,showModal,allData}) {
     }
   }  , [slug]);
   const openLocation = (slug,type) => {
-    console.log("test3",{type,slug})
+    const params = new URLSearchParams(searchParams.toString());
     if(type === "apn") {
-      router.push(`/map?apn=${slug}`, undefined, { shallow: true });
+      params.set('apn', slug); // Add or update `apn`
+      params.delete('location'); // Remove `location` if it exists
     }
     else {
-    // else type is a manually submitted location post
-    router.push(`/map?location=${slug}`, undefined, { shallow: true });
+      params.set('location', slug); // Add or update `location`
     }
+    const newUrl = `/map?${params.toString()}`;
+    router.push(newUrl, undefined, { shallow: true });
     setOpen(true);
     setTimeout(() => {
       const element = document.getElementsByClassName("swiper")[0];
@@ -60,6 +71,9 @@ function App({ pageData,showModal,allData}) {
       if (element) {
         // element.scrollIntoView({ block: "start"  });
         let container = getScrollableParent(element);
+        if (!container) {
+          container = document.documentElement; // Fallback to the document element
+        }
         container.scrollTo({
           top: 0,
           left: 0,
@@ -116,6 +130,7 @@ function App({ pageData,showModal,allData}) {
   return (
     <ContainerComponent 
     {...{
+      
       slug,
       forceOpen: setOpen,
       open, setOpen,
@@ -124,17 +139,39 @@ function App({ pageData,showModal,allData}) {
       setShowFireMap,
       selectedLocation,
       Map: showFireMap ?
-      <SplitMap {...{highlightedApn,open, setOpen,openLocation,itemData, setSelectedLocation,selectedMarker, setSelectedMarker }} />
+      <SplitMap {...{isMobile,highlightedApn,open, setOpen,openLocation,itemData, setSelectedLocation,selectedMarker, setSelectedMarker }} />
       :<Map1 {...{openLocation,itemData, setSelectedLocation,selectedMarker, setSelectedMarker }} />,
+      
       List: showModal?
-      <LocationModal
-      pageData = {pageData}
-      onClose={() => {
-        router.push('/map', undefined, { shallow: true }); // Remove query param
-      }}
-      />
-      :<List {...{openLocation,allData,itemData, selectedLocation,setSelectedLocation ,setSelectedMarker,selectedMarker,filterBy, setFilterBy}} />,
-      Details: <Details {...{ selectedLocation,setSelectedLocation ,itemData ,pageData, setSelectedMarker}} />,
+
+    <div style={{
+      width: '100%', height: '100%',
+      background: theme.palette.background.paper,
+    }}>
+      <Details pageData = {pageData} onClose={() => {
+
+            const params = new URLSearchParams(searchParams.toString());
+            if(params.has('location')){
+              params.delete('location'); // Remove `location` if it exists
+            }
+            else if(params.has('apn')){
+              params.delete('apn'); // Remove `apn` if it exists
+            }
+            // params.set('apn', slug); // Add or update `apn`
+            // params.delete('location'); // Remove `location` if it exists
+            const newUrl = `/map?${params.toString()}`;
+            router.push(newUrl, undefined, { shallow: true });
+
+
+            // window.history.back();
+        
+      }} />
+    </div>
+      :<List {...{isMobile,openLocation,allData,itemData, selectedLocation,setSelectedLocation ,setSelectedMarker,selectedMarker,filterBy, setFilterBy}} />,
+      
+      
+      Details: <div>-_- here</div>
+      // <Details {...{ selectedLocation,setSelectedLocation ,itemData ,pageData, setSelectedMarker}} />,
       
     }}
     > 

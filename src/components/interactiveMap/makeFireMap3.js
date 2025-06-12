@@ -1,6 +1,7 @@
 "use client";
 import L from "leaflet";
 let count = 0
+let viewSwitch=16
 const DAMAGE_LEVELS = {
     "Destroyed (>50%)": 4,
     "Major (26-50%)": 3,
@@ -88,8 +89,8 @@ function makeFireMap(map, fn, options) {
                     weight: 0,
                     color,
                     radius,
-                    opacity: zoom < 16 ? .5 : 0,
-                    fillOpacity: zoom < 16 ? .5 : 0,
+                    opacity: zoom < viewSwitch ? .5 : 0,
+                    fillOpacity: zoom < viewSwitch ? .5 : 0,
                     interactive: false,
                 })
             },
@@ -117,7 +118,7 @@ function makeFireMap(map, fn, options) {
         let parcelLayer
         dinsLayer.once('load', () => {
             parcelLayer = esri.featureLayer({
-                minZoom: 16,
+                minZoom: viewSwitch,
                 maxZoom: 20,
                 url: 'https://public.gis.lacounty.gov/public/rest/services/LACounty_Cache/LACounty_Parcel/MapServer/0',
                 where: '1=1',

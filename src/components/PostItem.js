@@ -38,10 +38,9 @@ const Post = ({ overrideOnClick,post, forceMobile = false,type }) => {
       variant="outlined"
       component={Link}
         onClick={overrideOnClick || function(){}}
-      href={overrideOnClick?'/community/events':`/community/board/${post.id}`}
+      href={overrideOnClick?`/map?location=${post.id}`:`/community/board/${post.id}`}
       sx={{
         display: "flex",
-
         maxWidth: isMobileLayout ? 400: "100%" ,
         transition: "0.2s",
         textDecoration: "none",
@@ -51,7 +50,10 @@ const Post = ({ overrideOnClick,post, forceMobile = false,type }) => {
         },
       }}
     >
-      <CardContent>
+      <CardContent sx={{
+        // padding: isMobileLayout ? 0 : 2,
+
+      }}>
         <Stack spacing={2}>
           {isMobileLayout ? (
             // MOBILE LAYOUT

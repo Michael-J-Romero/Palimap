@@ -1,17 +1,18 @@
 /* styles.css or globals.css */
 .greyscale {
-  filter: grayscale(1) brightness(1) invert(1) contrast(1) drop-shadow(1px 2px 1px rgba(0, 0, 0, 0.969)) !important;
-  /* opacity: 0.8 !important; */
+  filter: grayscale(1) brightness(2) invert(1) contrast(1) drop-shadow(1px 2px 1px rgba(0, 0, 0, 0.769)) !important;
+  opacity: 0 !important;
 
 }
 .greyscale-light {
-  filter: grayscale(1) brightness(1) invert(1) contrast(1) drop-shadow(1px 1px 0px rgba(0, 0, 0, 0.769)) !important;
-  /* opacity: 0.8 !important; */
+  filter: grayscale(1) brightness(2) invert(1) contrast(1) drop-shadow(1px 2px 0px rgba(0, 0, 0, 0.769)) !important;
+  opacity: 0 !important;
 
 }
 .greyscale-lightest {
-  filter: grayscale(1) brightness(1.5) invert(1) contrast(1) !important;
-  opacity: 0.8 !important;
+  /* //MAP ZOOMEDOUT */
+  filter: grayscale(1) brightness(2.5) invert(1) contrast(1) !important;
+  opacity: 0 !important;
 
 }
 .custom-div-icon .marker-container {
@@ -32,9 +33,9 @@
     margin-top: 2px;
   }
   
-  .leaflet-pane.leaflet-tile-pane {
+  /* .leaflet-pane.leaflet-tile-pane {
     clip-path: url(#clip-boundary);
-  }
+  } */
   /* .leaflet-pane.leaflet-tile-pane {
     mask-image: url(#svg-boundary-mask);
     mask-repeat: no-repeat;

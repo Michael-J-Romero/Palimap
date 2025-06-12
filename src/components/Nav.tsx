@@ -70,7 +70,7 @@ const Nav = () => {
   const isLoggedIn = false; // Replace later with real auth logic
 
   const navLinks = [
-    { label: 'Interactive Map', href: '/map' },
+    { label: 'Interactive Map', href: '/map',shortLabel: 'Map' },
     { label: 'Community', href: '/community' },
     { label: 'Resources', href: '/resources' },
   ];
@@ -96,8 +96,10 @@ const Nav = () => {
               } 
           onChange={handleTabChange}>
             {navLinks.slice(0, 2)
-            .map(({ label, href }) => (
-              <StyledTab key={href} value={href} label={label} />
+            .map(({ label, href,shortLabel }) => (
+              <StyledTab key={href} value={href} 
+              label={shortLabel || label}
+              />
             ))}
           </StyledTabs>
 

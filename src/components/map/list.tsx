@@ -14,6 +14,7 @@ import AddIcon from "@mui/icons-material/Add";
 import SimpleBar from "simplebar-react";
 import {settings as allSettings,types} from '@/data/builtIn'
 import NewPostButton from "../NewPost";
+import LocationListItem from "@/components/cards/LocationListItem";
 const settings=allSettings
 
 
@@ -28,6 +29,7 @@ function List({
   selectedMarker,
   filterBy,
   setFilterBy,
+  isMobile,
 }) {
   const [sortBy, setSortBy] = useState("date");
   let data=allData
@@ -55,6 +57,7 @@ function List({
 console.log("theme",theme)
   return (
     <Box
+
     boxShadow={4}
       sx={{
         zIndex: settings.zIndex.mapList,
@@ -139,6 +142,7 @@ console.log("theme",theme)
           ))}
         </Select>
 
+{!isMobile &&
         <Select
           value={sortBy}
           onChange={(event) => setSortBy(event.target.value)}
@@ -151,6 +155,7 @@ console.log("theme",theme)
           <MenuItem value="title">By Title</MenuItem>
           <MenuItem value="type">By Type</MenuItem>
         </Select>
+        }
         <NewPostButton />
 
       </Box>
@@ -167,123 +172,13 @@ console.log("theme",theme)
       {data
         .map((location) => { 
           const isSelected = selectedMarker === 1 + location.id;
-
-          return (
-            <Box
-              key={location.id}
-              id={`list-item-${1 + location.id}`}
-              onClick={() => openLocation( location.id)}
-              // onClick={() => setSelectedLocation(1 + location.id)}
-              onMouseOver={() => setSelectedMarker(1 + location.id)}
-              sx={{
-                borderBottom: `1px solid ${theme.palette.divider}`,
-
-                display: "flex",
-                px: 2,
-                py: 1,
-                transition: "background-color 0.2s ease",
-                cursor: "pointer",
-                bgcolor: isSelected
-                  ? theme.palette.action.selected
-                  : "transparent",
-                "&:hover": {
-                  bgcolor: theme.palette.action.hover,
-                },
-              }}
-            >
-              <Box
-                sx={{
-                  width: 180,
-                  // height: "100%",
-                  borderRadius: 1,
-                  flexShrink: 0,
-                  backgroundImage: `url(${location.image})`,
-                  backgroundSize: "cover",
-                  backgroundPosition: "center",
-                }}
-              />
-              <Box
-                sx={{
-                  flex: 1,
-                  display: "flex",
-                  flexDirection: "column",
-                  justifyContent: "center",
-                  py: 1,
-                  px: 2,
-                }}
-              >
-                <Box
-                  sx={{
-                    display: "flex",
-                    alignItems: "center",
-                    justifyContent: "space-between",
-                    mb: 0.5,
-                    gap: 1,
-                    flexWrap: "wrap",
-                  }}
-                >
-                  
-                  <Typography
-                    variant="subtitle1"
-                    fontWeight={100}
-                    lineHeight={1.2}
-                    noWrap
-                    sx={{
-                      fontFamily: "system-ui",
-                    }}
-                  >
-                    {location.title}
-                  </Typography>
-
-                  
-                </Box>
-                  {/* address */}
-                  <Typography
-                    variant="body2"
-                    color="text.secondary"
-                    sx={{
-                      overflow: "hidden",
-                      textOverflow: "ellipsis",
-                      display: "-webkit-box",
-                      WebkitBoxOrient: "vertical",
-                      WebkitLineClamp: 1,
-                      fontSize: "0.875rem",
-                      fontWeight: 500,
-                      lineHeight: 1.2,
-                    }}
-                  >
-                    {location.address || "1234 Main St, Los Angeles, CA 90001"}
-                  </Typography>
-
-                <Typography
-                  variant="caption"
-                  color="text.secondary"
-                  sx={{ 
-                    opacity: 0.8,
-                    mt: 0.7
-                  }}
-                >
-                  {location.date}
-                </Typography>
-
-                <Typography
-                  variant="body2"
-                  color="text.secondary"
-                  sx={{
-                    overflow: "hidden",
-                    textOverflow: "ellipsis",
-                    display: "-webkit-box",
-                    WebkitBoxOrient: "vertical",
-                    WebkitLineClamp: 2,
-                    fontSize: "0.875rem",
-                    lineHeight: 1.4,
-                  }}
-                >
-                  {location.body}
-                </Typography>
-              </Box>
-            </Box>
-          );
+return<LocationListItem
+  location={location}
+  isSelected={false}
+  // isSelected={isSelected}
+  openLocation={openLocation}
+  setSelectedMarker={setSelectedMarker}
+/>
         })}
         <Box
           sx={{

@@ -1,5 +1,4 @@
 "use client";
-import { useState } from 'react';
 import dayjs from 'dayjs';
 import Footer from '@/components/Footer';
 import {
@@ -32,83 +31,155 @@ export default function CommunityPage({ children }) {
     }
 }
 
+ function useElementHeight() {
+  const ref = useRef(null);
+  const [height, setHeight] = useState(0);
+
+  useEffect(() => {
+    if (!ref.current) return;
+
+    const observer = new ResizeObserver(([entry]) => {
+      if (entry?.contentRect) {
+        setHeight(entry.contentRect.height);
+      }
+    });
+
+    observer.observe(ref.current);
+    return () => observer.disconnect();
+  }, []);
+
+  return [ref, height];
+}
+
+function useElementHeightById(id) {
+  const [height, setHeight] = useState(0);
+
+  useEffect(() => {
+    const el = document.getElementById(id);
+    if (!el) return;
+
+    const observer = new ResizeObserver(([entry]) => {
+      if (entry?.contentRect) {
+        setHeight(entry.contentRect.height);
+      }
+    });
+
+    observer.observe(el);
+
+    // Initialize immediately in case ResizeObserver doesn't fire
+    setHeight(el.offsetHeight);
+
+    return () => observer.disconnect();
+  }, [id]);
+
+  return height;
+}
+
+
+import { useState, useRef, useEffect } from 'react';
+// import useElementHeight from '@/hooks/useElementHeight';
+// import clsx from 'clsx';
 
 function MobileLayout({ children, tabIndex }) {
-    return (
-        <Box display="flex" flexDirection="column" sx={{
-            height: '100%',
-        }}>
-            {/* Sidebar */}
-            <Box
-                width='100%'
-                sx={{
-                    backgroundColor: 'background.paper',
-                    flex: '0',
-                    // px: 2,
-                    // pr: 0,
-                    // py: 3, 
-                }}
-            >
-                <Tabs
+  const [showHeader, setShowHeader] = useState(true);
+  const lastScrollY = useRef(0);
+  const scrollContainerRef = useRef(null);
 
-                    orientation="horizontal"
-                    variant="scrollable"
-                    value={tabIndex}
-                    textColor="primary"
-                    indicatorColor="primary"
-                    sx={{
-                        '& .MuiTabs-flexContainer':{
-                            justifyContent: 'space-around',
-                            alignItems: 'center',
-                            
-                        },
-                        // mb: 2,
-                        width: '100%',
-                        overflowX: 'auto',
-                        '& .MuiTabs-scroller': {
-                            overflowX: 'auto',
-                        },
-                    }}
-                >
-                    <StyledTabMobile label="Discussion" component={Link} href="/community/board" />
-                    <StyledTabMobile label="Calendar" component={Link} href="/community/events" />
-                    <StyledTabMobile label="Directory" component={Link} href="/community/directory" />
-                </Tabs>
-            </Box>
-            {/* Main Content */}
-            <Box
-                display="flex"
-                flexDirection="column"
-                flex={1}
-                sx={{
-                    width: '100%',
-                    overflowY: 'auto',
-                }}
-            >
-                <Box flex={1} p={1} sx={{
-                    width: '100%',
-                }}
+  const primaryHeight = useElementHeightById('primary-header');
+//   const [primaryHeaderRef, primaryHeight] = useElementHeight();
+  const [tabsRef, tabsHeight] = useElementHeight();
 
-                    px={1} py={1} maxWidth="md" mx="auto"
-                >
-                    {children}
-                </Box>
-                <Footer />
-            </Box>
+  // Scroll behavior
+  useEffect(() => {
+    const container = scrollContainerRef.current;
+    if (!container) return;
+
+    const handleScroll = () => {
+      const currentScrollY = container.scrollTop;
+      if (currentScrollY > lastScrollY.current + 10) {
+        setShowHeader(false); // down
+      } else if (currentScrollY < lastScrollY.current - 10) {
+        setShowHeader(true); // up
+      }
+      lastScrollY.current = currentScrollY;
+    };
+
+    container.addEventListener('scroll', handleScroll);
+    return () => container.removeEventListener('scroll', handleScroll);
+  }, []);
+
+  return (
+    <Box display="flex" flexDirection="column" sx={{ height: '100%' }}>
+     
+
+      {/* Fixed Tab Bar */}
+      <Box
+        ref={tabsRef} 
+        // className={clsx('mobile-tab-bar', { hidden: !showHeader })}
+        className={`mobile-tab-bar ${showHeader ? '' : 'hidden'}`}
+        sx={{
+        boxShadow: 2,
+          position: 'fixed',
+          top: `${primaryHeight}px`,
+          left: 0,
+          right: 0,
+          zIndex: 999,
+          backgroundColor: 'background.paper',
+          transition: 'transform 0.3s ease',
+        }}
+      >
+        <Tabs
+          orientation="horizontal"
+          variant="scrollable"
+          value={tabIndex}
+          textColor="primary"
+          indicatorColor="primary"
+          color="primary"
+          compact
+          sx={{
+            '& .MuiTabs-flexContainer': {
+              justifyContent: 'space-around',
+              alignItems: 'center',
+            },
+            width: '100%',
+            overflowX: 'auto',
+          }}
+        >
+          <StyledTabMobile label="Discussion" component={Link} href="/community/board" />
+          <StyledTabMobile label="Calendar" component={Link} href="/community/events" />
+          <StyledTabMobile label="Directory" component={Link} href="/community/directory" />
+        </Tabs>
+      </Box>
+
+      {/* Scrollable Content */}
+      <Box
+        ref={scrollContainerRef}
+        display="flex"
+        flexDirection="column"
+        flex={1}
+        sx={{
+          width: '100%',
+          overflowY: 'auto',
+          paddingTop: `${ tabsHeight}px`,
+        }}
+      >
+        <Box flex={1} px={1} py={1} maxWidth="md" mx="auto">
+          {children}
         </Box>
-    );
+        <Footer />
+      </Box>
+    </Box>
+  );
 }
+
+
 const StyledTabMobile = styled(Tab)`
+  text-transform: none !important;
+
     &.Mui-selected {
         background-color: rgba(0, 0, 0, 0.08);
-    }
-    &.MuiButtonBase-root {
-        // align-items: flex-start;
-        // border-radius: 8px;
-        // margin-bottom: 4px;
-    }
+    } 
     &.MuiButtonBase-root:hover {
-
         background-color: rgba(0, 0, 0, 0.08);
     }
     &.MuiButtonBase-root:focus {
@@ -182,6 +253,7 @@ function DesktopLayout({ children, tabIndex }) {
 }
 
 const StyledTabDesktop = styled(Tab)`
+  text-transform: none !important;
     &.Mui-selected {
         background-color: rgba(0, 0, 0, 0.08);
     }

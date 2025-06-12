@@ -32,6 +32,7 @@ const getTheme = (mode = 'light') =>
             // Dark theme colors
             primary: {
               main: '#869e75',
+              
             },
             secondary: {
               main: '#90caf9',
@@ -40,9 +41,9 @@ const getTheme = (mode = 'light') =>
             },
             background: {
               default: '#121212',
-              paper: '#1e1e1e',
-              // subtle: 'yellow',
-              subtle: '#262626',
+              paper: '#292929',
+               subtle: '#222',
+               pop: '#444',
               standout: '#353535',
             },
             text: {

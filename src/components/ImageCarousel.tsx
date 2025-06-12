@@ -6,7 +6,7 @@ import 'swiper/css/navigation';
 import 'swiper/css/pagination';
 import 'swiper/css/effect-fade';
 
-export default function LocationSlider({ images ,height}) {
+export default function LocationSlider({ images ,height,flatBottom,allFlat}) {
   const theme = useTheme();
   const isDark = theme.palette.mode === 'dark';
 
@@ -16,15 +16,21 @@ export default function LocationSlider({ images ,height}) {
         position: 'relative',
         width: '100%',
         // height: { xs: 240, sm: 360, md: 420 },
-        height: { xs: height/3, sm: height/2, md: height },
+        height: height || 360,
+        // height: { xs: height/1.2, sm: height/1.1, md: height },
         borderRadius: 1,
         //no top border radius
-        // borderTopLeftRadius: 0,
-        // borderTopRightRadius: 0,
+        ...(flatBottom?{
+          borderBottomLeftRadius: 0,
+          borderBottomRightRadius: 0,
+        }
+        :allFlat?{
+          borderRadius: 0,
+        }:{}),
         // mt: 3,
         overflow: 'hidden',
         boxShadow: 4,
-        mb: 3,
+        mb: 1,
       }}
     >
       <Swiper

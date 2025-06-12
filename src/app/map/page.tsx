@@ -5,7 +5,6 @@ import Map from '@/components/map';
 
 import { useSearchParams, useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
-import LocationModal from '@/components/Location'; // Your modal
 import {settings as allSettings} from '@/data/builtIn'
 const settings=allSettings
 export default function MapPage() {
@@ -21,6 +20,7 @@ export default function MapPage() {
     let parcelUrl=`https://public.gis.lacounty.gov/public/rest/services/LACounty_Cache/LACounty_Parcel/MapServer/0/query?where=APN='${apn}'&outFields=*&f=geojson`
     let response = await fetch(parcelUrl);
     let data = await response.json();
+    
     console.log("data2",data)
     return data;
   }

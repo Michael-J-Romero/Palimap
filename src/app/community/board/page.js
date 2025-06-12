@@ -135,8 +135,8 @@ export default function CommunityBoardPage() {
         sx={{ mb: 3 }} />
       <Stack direction={{ xs: 'column', sm: 'row' }} spacing={2} mb={2} alignItems="center" justifyContent="space-between">
         <Stack direction="row" 
-        spacing={2} alignItems="center" flexGrow={1} flexWrap="wrap">
-          <FormControl size="small" sx={{ flexGrow:1,flexShrink:1,wrap:'nowrap',minWidth: 150 }}>
+         alignItems="center" flexGrow={1} flexWrap="wrap">
+          <FormControl size="small" sx={{m:.5, flexGrow:1,flexShrink:1,wrap:'nowrap',minWidth: 150 }}>
             <InputLabel>Category</InputLabel>
             <Select
               value={selectedCategory}
@@ -151,7 +151,7 @@ export default function CommunityBoardPage() {
               ))}
             </Select>
           </FormControl>
-          <FormControl size="small" sx={{ flexGrow:1,flexShrink:1,wrap:'nowrap',minWidth: 150 }}>
+          <FormControl size="small" sx={{ m:.5,flexGrow:1,flexShrink:1,wrap:'nowrap',minWidth: 150 }}>
             <InputLabel>Sort By</InputLabel>
             <Select
               value={sortOrder}
